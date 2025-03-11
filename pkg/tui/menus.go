@@ -22,18 +22,18 @@ var MainMenu = []string{
 
 // MenuModel is the model for the main menu.
 type MenuModel struct {
-	Cursor int
-	Items  []string
-	Menu   string
+	cursor int
+	items  []string
+	menu   string
 }
 
 // InitialMenuModel returns the initial model for the main menu.
-func InitialMenuModel(sSvc service.StrainService, sStr storage.StrainStore) MenuModel {
-	strainStore = sStr
-	strainService = sSvc
+func InitialMenuModel(ssvc service.StrainService, sstr storage.StrainStore) MenuModel {
+	strainStore = sstr
+	strainService = ssvc
 	return MenuModel{
-		Items: MainMenu,
-		Menu:  "main",
+		items: MainMenu,
+		menu:  "main",
 	}
 }
 
@@ -53,19 +53,19 @@ func (m MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c", "q":
 			return m, tea.Quit
 		case "up", "k":
-			m.Cursor--
-			if m.Cursor < 0 {
-				m.Cursor = len(m.Menu) - 1 // Wrap to last item
+			m.cursor--
+			if m.cursor < 0 {
+				m.cursor = len(m.menu) - 1 // Wrap to last item
 			}
 		case "down", "j":
-			m.Cursor++
-			if m.Cursor >= len(m.Menu) {
-				m.Cursor = 0 // Wrap to first item
+			m.cursor++
+			if m.cursor >= len(m.menu) {
+				m.cursor = 0 // Wrap to first item
 			}
 		case "1", "2", "3", "4":
 			idx := int(msg.String()[0] - '1') // Convert key to index
-			if idx < len(m.Menu) {
-				m.Cursor = idx // Jump to selected menu item
+			if idx < len(m.menu) {
+				m.cursor = idx // Jump to selected menu item
 			}
 		case "enter":
 			return onMenuSelected(m)
@@ -80,10 +80,10 @@ func (m MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 // rendered after every Update.
 func (m MenuModel) View() string {
 	s := "🥦 Welcome to Wits!\n\n"
-	if m.Menu == "main" {
-		for i, item := range m.Items {
+	if m.menu == "main" {
+		for i, item := range m.items {
 			cursor := " "
-			if m.Cursor == i {
+			if m.cursor == i {
 				cursor = "➡️ "
 			}
 			s += fmt.Sprintf("%s(%d): %s\n", cursor, i+1, item)
@@ -92,7 +92,7 @@ func (m MenuModel) View() string {
 		s += onSubmenuSelected(m)
 	}
 	s += "\nPress ctrl+c or q to quit."
-	if m.Menu != "main" {
+	if m.menu != "main" {
 		s += "\nPress esc to return to main menu."
 	}
 	return s
@@ -100,28 +100,28 @@ func (m MenuModel) View() string {
 
 // onMenuSelected returns a model for the selected menu.
 func onMenuSelected(m MenuModel) (tea.Model, tea.Cmd) {
-	switch m.Menu {
+	switch m.menu {
 	case "main":
-		switch m.Cursor {
+		switch m.cursor {
 		case 0:
 			return MenuModel{
-				Items: StrainsSubmenu,
-				Menu:  "strains"}, nil
+				items: StrainsSubmenu,
+				menu:  "strains"}, nil
 		case 1:
 			return MenuModel{
-				Items: DevicesSubmenu,
-				Menu:  "devices"}, nil
+				items: DevicesSubmenu,
+				menu:  "devices"}, nil
 		case 2:
 			return MenuModel{
-				Items: SettingsSubmenu,
-				Menu:  "settings"}, nil
+				items: SettingsSubmenu,
+				menu:  "settings"}, nil
 		case 3:
 			return MenuModel{
-				Items: StatsSubmenu,
-				Menu:  "stats"}, nil
+				items: StatsSubmenu,
+				menu:  "stats"}, nil
 		}
 	case "strains":
-		switch m.Cursor {
+		switch m.cursor {
 		case 0:
 			return AddStrain(strainService), nil
 		case 1:
@@ -133,10 +133,10 @@ func onMenuSelected(m MenuModel) (tea.Model, tea.Cmd) {
 
 // onSubmenuSelected renders the selected submenu and its items.
 func onSubmenuSelected(m MenuModel) string {
-	s := fmt.Sprintf("%s Menu:\n", m.Menu)
-	for i, item := range m.Items {
+	s := fmt.Sprintf("%s Menu:\n", m.menu)
+	for i, item := range m.items {
 		cursor := " "
-		if m.Cursor == i {
+		if m.cursor == i {
 			cursor = "➡️ "
 		}
 		s += fmt.Sprintf("%s(%d): %s\n", cursor, i+1, item)
