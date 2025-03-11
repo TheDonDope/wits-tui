@@ -33,8 +33,8 @@ func geneticsOptions() []huh.Option[can.GeneticType] {
 // radiationOptions returns a list of options for radiation treatment for the user to choose from.
 func radiationOptions() []huh.Option[bool] {
 	var radiations []huh.Option[bool]
-	radiations = append(radiations, huh.NewOption("yes", true))
-	radiations = append(radiations, huh.NewOption("no", false))
+	radiations = append(radiations, huh.NewOption("No", true))
+	radiations = append(radiations, huh.NewOption("Yes", false))
 	return radiations
 }
 

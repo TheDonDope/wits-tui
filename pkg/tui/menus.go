@@ -40,7 +40,7 @@ func InitialMenuModel(sSvc service.StrainService, sStr storage.StrainStore) Menu
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
 func (m MenuModel) Init() tea.Cmd {
-	// return `nil`, which means "no I/O right now, please."
+	storage.EnsureWitsFolder()
 	return nil
 }
 

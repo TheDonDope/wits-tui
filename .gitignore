@@ -12,6 +12,7 @@
 /public/js/*
 !/public/js/.gitkeep
 wits
+/.wits
 
 # dependencies
 node_modules

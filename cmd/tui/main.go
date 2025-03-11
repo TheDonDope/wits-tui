@@ -12,9 +12,13 @@ import (
 )
 
 func main() {
-	strainStore := storage.NewStrainStoreInMemory()
+	strainStore, err := storage.NewStrainStoreYMLFile()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading data from YML File: %v", err)
+		os.Exit(1)
+	}
 	strainService := service.NewStrainService(strainStore)
-	_, err := tea.NewProgram(tui.InitialMenuModel(strainService, strainStore)).Run()
+	_, err = tea.NewProgram(tui.InitialMenuModel(strainService, strainStore)).Run()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error starting program: %v", err)
 		os.Exit(1)

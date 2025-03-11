@@ -33,19 +33,13 @@ const (
 	Indica
 	// Hybrid is a mix of both sativa and indica phenotypes
 	Hybrid
-	// SativaHybrid is a mix of sativa and another phenotype
-	SativaHybrid
-	// IndicaHybrid is a mix of indica and another phenotype
-	IndicaHybrid
 )
 
 // Genetics is a collection of all known genetic types.
 var Genetics = map[GeneticType]string{
-	Sativa:       "Sativa",
-	Indica:       "Indica",
-	Hybrid:       "Hybrid",
-	SativaHybrid: "Sativa-hybrid",
-	IndicaHybrid: "Indica-hybrid"}
+	Sativa: "Sativa",
+	Indica: "Indica",
+	Hybrid: "Hybrid"}
 
 // CannabinoidType is the enum for the cannnabinoid keys.
 type CannabinoidType int
