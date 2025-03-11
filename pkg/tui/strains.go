@@ -3,6 +3,7 @@ package tui
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"time"
 
@@ -27,14 +28,21 @@ func geneticsOptions() []huh.Option[can.GeneticType] {
 	for k, v := range can.Genetics {
 		genetics = append(genetics, huh.NewOption(v, k))
 	}
+	sort.Slice(genetics, func(i, j int) bool {
+		return genetics[i].Value < genetics[j].Value
+	})
 	return genetics
 }
 
 // radiationOptions returns a list of options for radiation treatment for the user to choose from.
 func radiationOptions() []huh.Option[bool] {
 	var radiations []huh.Option[bool]
-	radiations = append(radiations, huh.NewOption("No", true))
-	radiations = append(radiations, huh.NewOption("Yes", false))
+	radiations = append(radiations, huh.NewOption("No", false))
+	radiations = append(radiations, huh.NewOption("Yes", true))
+	sort.Slice(radiations, func(i, j int) bool {
+		// We consider `false`` to be "smaller" than `true``, so we put `false`` before `true`
+		return !radiations[i].Value && radiations[j].Value
+	})
 	return radiations
 }
 
@@ -44,6 +52,9 @@ func terpeneOptions() []huh.Option[*can.Terpene] {
 	for _, t := range can.Terpenes {
 		terpenes = append(terpenes, huh.NewOption(t.Name, t))
 	}
+	sort.Slice(terpenes, func(i, j int) bool {
+		return terpenes[i].Value.Name < terpenes[j].Value.Name
+	})
 	return terpenes
 }
 
