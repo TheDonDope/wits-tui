@@ -6,7 +6,7 @@ install:
 	go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
 
 build:
-	go build -v -o ./bin/wits ./cmd/tui/main.go
+	go build -v -o ./bin/wits ./cmd/wits/main.go
 
 clean:
 	rm -f ./bin/wits

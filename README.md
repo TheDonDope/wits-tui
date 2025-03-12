@@ -8,7 +8,7 @@ Building the binary requires only a single step:
 
 ```shell
 $ make build
-go build -v -o ./bin/wits ./cmd/tui/main.go
+go build -v -o ./bin/wits ./cmd/wits/main.go
 ```
 
 ## Running the Application
