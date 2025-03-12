@@ -16,9 +16,9 @@ const (
 
 // statisticsActions is a list of options for the stats appliance.
 var statisticsActions = map[statisticsAction]string{
-	usageHistory:  "📅 Usage History",
-	trends:        "📈 Trends",
-	dosageTracker: "🔢 Dosage Tracker"}
+	usageHistory:  markedText("📅 &Usage History"),
+	trends:        markedText("📈 &Trends"),
+	dosageTracker: markedText("🔢 &Dosage Tracker")}
 
 // StatisticsAppliance ...
 type StatisticsAppliance struct {

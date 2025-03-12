@@ -29,10 +29,10 @@ const (
 
 // strainsActions is a list of options for the strains appliance.
 var strainsActions = map[strainsAction]string{
-	addStrain:    "➕ Add Strain",
-	viewStrain:   "📋 View Strains",
-	editStrain:   "✏️ Edit Strain",
-	deleteStrain: "❌ Delete Strain"}
+	addStrain:    markedText("➕ &Add Strain"),
+	viewStrain:   markedText("📋 &View Strains"),
+	editStrain:   markedText("✏️ &Edit Strain"),
+	deleteStrain: markedText("❌ &Delete Strain")}
 
 var (
 	strainStore   storage.StrainStore

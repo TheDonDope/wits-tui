@@ -17,10 +17,10 @@ const (
 
 // settingsActions is a list of options for the settings appliance.
 var settingsActions = map[settingsAction]string{
-	appereance:       "🎨 Appearance",
-	keybindings:      "⌨️ Keybindings",
-	localization:     "🌍 Localization",
-	backupAndRestore: "💾 Backup & Restore"}
+	appereance:       markedText("🎨 &Appearance"),
+	keybindings:      markedText("⌨️ &Keybindings"),
+	localization:     markedText("🌍 &Localization"),
+	backupAndRestore: markedText("💾 &Backup & Restore")}
 
 // SettingsAppliance ...
 type SettingsAppliance struct {

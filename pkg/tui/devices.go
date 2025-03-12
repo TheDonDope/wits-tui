@@ -17,10 +17,10 @@ const (
 
 // devicesActions is a list of options for the devices appliance.
 var devicesActions = map[devicesAction]string{
-	createDevice: "➕ Add Device",
-	viewDevice:   "📋 View Devices",
-	editDevice:   "✏️ Edit Device",
-	deleteDevice: "❌ Delete Device"}
+	createDevice: markedText("➕ &Add Device"),
+	viewDevice:   markedText("📋 &View Devices"),
+	editDevice:   markedText("✏️ &Edit Device"),
+	deleteDevice: markedText("❌ &Delete Device")}
 
 // DevicesAppliance ...
 type DevicesAppliance struct {

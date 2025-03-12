@@ -8,10 +8,10 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-// MaxWidth defines the maximum boundaries the application has to adhere to
-const MaxWidth = 120
-
-const homeTitle = "🥦 Wits"
+const (
+	maxWidth  = 120
+	homeTitle = "🥦 Wits"
+)
 
 var (
 	red    = lipgloss.AdaptiveColor{Light: "#FE5F86", Dark: "#FE5F86"}
@@ -87,7 +87,7 @@ type HomeView struct {
 
 // NewHomeView returns a new HomeView with empty content.
 func NewHomeView() *HomeView {
-	m := &HomeView{width: MaxWidth, title: homeTitle}
+	m := &HomeView{width: maxWidth, title: homeTitle}
 	m.lg = lipgloss.DefaultRenderer()
 	m.styles = NewStyles(m.lg)
 	return m
@@ -170,14 +170,14 @@ func (hv *HomeView) decoratedList() string {
 }
 
 func (hv *HomeView) decoratedListBarAndExtras() string {
-	var builder []string
+	var b strings.Builder
 	if hv.listBar != nil {
-		builder = append(builder, hv.listBar.View())
+		b.WriteString(hv.listBar.View())
 	}
 	if hv.listExtras != nil {
-		builder = append(builder, hv.listExtras.View())
+		b.WriteString(hv.listExtras.View())
 	}
-	return lipgloss.JoinHorizontal(lipgloss.Top, builder...) + "\n\n"
+	return lipgloss.JoinHorizontal(lipgloss.Top, b.String()) + "\n\n"
 }
 
 func (hv *HomeView) decoratedPreview() string {
@@ -196,13 +196,15 @@ func markedText(s string) string {
 	return s
 }
 
+// breadcrumTitle returns a breadcrumb navigation representation of all given nodes,
+// separated by a ` > `.
 func breadcrumbTitle(nodes ...string) string {
-	var builder strings.Builder
+	var b strings.Builder
 	for i, node := range nodes {
-		builder.WriteString(node)
+		b.WriteString(node)
 		if i < len(nodes)-1 {
-			builder.WriteString(" > ")
+			b.WriteString(" > ")
 		}
 	}
-	return builder.String()
+	return b.String()
 }
