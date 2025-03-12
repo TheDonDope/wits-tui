@@ -64,8 +64,6 @@ type HomeViewBuilder interface {
 	Extras(e tea.Model)
 	// Preview sets the preview to render
 	Preview(p tea.Model)
-	// Panel returns the built panel
-	Panel() tea.Model
 }
 
 // HomeView holds the default implementation for the HomeViewBuilder
@@ -120,14 +118,6 @@ func (hv *HomeView) Preview(p tea.Model) {
 	hv.preview = p
 }
 
-// Panel returns the built panel
-func (hv *HomeView) Panel() tea.Model {
-	if hv.panel == nil {
-		hv.panel = hv.buildPanel()
-	}
-	return hv.panel
-}
-
 // tea.Model interface ---------------------------------------------------------
 
 // Init ...
@@ -157,15 +147,9 @@ func (hv *HomeView) View() string {
 
 	header := hv.appBoundaryView(hv.title)
 
-	barExtras := lipgloss.JoinHorizontal(lipgloss.Top, hv.listBar.View(), hv.listExtras.View())
-
-	body := lipgloss.JoinVertical(lipgloss.Left, hv.listView.View(), barExtras, hv.preview.View())
+	body := lipgloss.JoinVertical(lipgloss.Left, hv.decoratedList(), hv.decoratedListBarAndExtras(), hv.decoratedPreview())
 
 	return s.Base.Render(header + "\n" + body)
-}
-
-func (hv *HomeView) buildPanel() tea.Model {
-	return nil
 }
 
 func (hv *HomeView) appBoundaryView(text string) string {
@@ -176,6 +160,31 @@ func (hv *HomeView) appBoundaryView(text string) string {
 		lipgloss.WithWhitespaceChars("/"),
 		lipgloss.WithWhitespaceForeground(indigo),
 	)
+}
+
+func (hv *HomeView) decoratedList() string {
+	if hv.listView == nil {
+		return "\n\n"
+	}
+	return hv.listView.View() + "\n\n"
+}
+
+func (hv *HomeView) decoratedListBarAndExtras() string {
+	var builder []string
+	if hv.listBar != nil {
+		builder = append(builder, hv.listBar.View())
+	}
+	if hv.listExtras != nil {
+		builder = append(builder, hv.listExtras.View())
+	}
+	return lipgloss.JoinHorizontal(lipgloss.Top, builder...) + "\n\n"
+}
+
+func (hv *HomeView) decoratedPreview() string {
+	if hv.preview == nil {
+		return ""
+	}
+	return hv.preview.View() + "\n\n"
 }
 
 func min(x, y int) int {

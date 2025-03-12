@@ -9,18 +9,84 @@ import (
 
 	can "github.com/TheDonDope/wits-tui/pkg/cannabis"
 	"github.com/TheDonDope/wits-tui/pkg/service"
+	"github.com/TheDonDope/wits-tui/pkg/storage"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/huh"
 	"github.com/google/uuid"
 )
 
-// StrainsSubmenu is a list of options for the strains submenu.
-var StrainsSubmenu = []string{
-	"➕ Add Strain",
-	"📋 View Strains",
-	"✏️ Edit Strain",
-	"❌ Remove Strain"}
+const strainsTitle = "Strains"
+
+type strainsAction int
+
+const (
+	addStrain strainsAction = iota
+	viewStrain
+	editStrain
+	deleteStrain
+)
+
+// strainsActions is a list of options for the strains appliance.
+var strainsActions = map[strainsAction]string{
+	addStrain:    "➕ Add Strain",
+	viewStrain:   "📋 View Strains",
+	editStrain:   "✏️ Edit Strain",
+	deleteStrain: "❌ Delete Strain"}
+
+var (
+	strainStore   storage.StrainStore
+	strainService service.StrainService
+)
+
+// StrainsAppliance ...
+type StrainsAppliance struct {
+	hv *HomeView
+}
+
+// NewStrainsAppliance ...
+func NewStrainsAppliance() *StrainsAppliance {
+	s := &StrainsAppliance{
+		hv: NewHomeView(),
+	}
+	return s
+}
+
+// Init ...
+func (s *StrainsAppliance) Init() tea.Cmd {
+	s.hv.title = settingsTitle
+	sstr, err := storage.NewStrainStoreYMLFile()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading data from YML File: %v", err)
+		os.Exit(1)
+	}
+	strainStore = sstr
+	strainService = service.NewStrainService(strainStore)
+	return nil
+}
+
+// Update ...
+func (s *StrainsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "q":
+			return s, tea.Quit
+		case "esc":
+			return InitialMenuModel(), nil
+		}
+	}
+
+	var cmd tea.Cmd
+	hv, cmd := s.hv.Update(msg)
+	s.hv = hv.(*HomeView)
+	return s, cmd
+}
+
+// View ...
+func (s *StrainsAppliance) View() string {
+	return s.hv.View()
+}
 
 // geneticsOptions returns a list of genetic options for the user to choose from.
 func geneticsOptions() []huh.Option[can.GeneticType] {
