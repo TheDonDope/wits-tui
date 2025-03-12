@@ -84,7 +84,7 @@ func (m MenuModel) View() string {
 		for i, item := range m.items {
 			cursor := " "
 			if m.cursor == i {
-				cursor = "➡️ "
+				cursor = "> "
 			}
 			s += fmt.Sprintf("%s(%d): %s\n", cursor, i+1, item)
 		}
@@ -137,7 +137,7 @@ func onSubmenuSelected(m MenuModel) string {
 	for i, item := range m.items {
 		cursor := " "
 		if m.cursor == i {
-			cursor = "➡️ "
+			cursor = "> "
 		}
 		s += fmt.Sprintf("%s(%d): %s\n", cursor, i+1, item)
 	}

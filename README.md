@@ -19,7 +19,7 @@ After building, simply invoke:
 $ ./bin/wits
 🥦 Welcome to Wits!
 
-➡ (1): 🌿 Strains
+> (1): 🌿 Strains
  (2): 🚀 Devices
  (3): 🔧 Settings
  (4): 📊 Stats
