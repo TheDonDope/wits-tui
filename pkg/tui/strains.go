@@ -57,7 +57,7 @@ func NewStrainsAppliance() *StrainsAppliance {
 		hv: NewHomeView(),
 	}
 	s.hv.Title(strainsTitle)
-	s.hv.List(ListStrains().View())
+	// s.hv.List(ListStrains())
 	return s
 }
 

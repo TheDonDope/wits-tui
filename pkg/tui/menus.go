@@ -9,10 +9,10 @@ import (
 
 // Appliances is a list of options for the main menu.
 var Appliances = []string{
-	"🌿 Strains",
-	"🚀 Devices",
-	"🔧 Settings",
-	"📊 Stats"}
+	markedText("🌿 &Strains"),
+	markedText("🚀 &Devices"),
+	markedText("🔧 S&ettings"),
+	markedText("📊 S&tats")}
 
 // MenuModel is the model for the main menu.
 type MenuModel struct {
@@ -52,11 +52,14 @@ func (m MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.cursor >= len(m.items) {
 				m.cursor = 0 // Wrap to first item
 			}
-		case "1", "2", "3", "4":
-			idx := int(msg.String()[0] - '1') // Convert key to index
-			if idx < len(m.items) {
-				m.cursor = idx // Jump to selected menu item
-			}
+		case "alt+s":
+			m.cursor = 0
+		case "alt+d":
+			m.cursor = 1
+		case "alt+e":
+			m.cursor = 2
+		case "alt+t":
+			m.cursor = 3
 		case "enter":
 			return onMenuSelected(m)
 		case "esc":
@@ -75,7 +78,7 @@ func (m MenuModel) View() string {
 		if m.cursor == i {
 			cursor = "> "
 		}
-		s += fmt.Sprintf("%s(%d): %s\n", cursor, i+1, item)
+		s += fmt.Sprintf("%s%s\n", cursor, item)
 	}
 	s += "\nPress ctrl+c or q to quit."
 	return s

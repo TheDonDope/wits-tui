@@ -1,6 +1,9 @@
 package tui
 
 import (
+	"fmt"
+	"strings"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -57,13 +60,13 @@ type HomeViewBuilder interface {
 	// Title sets the title to render
 	Title(t string)
 	// List sets the list to render
-	List(l string)
+	List(l tea.Model)
 	// Bar sets the list bar to render
-	Bar(b string)
+	Bar(b tea.Model)
 	// Extras sets the extras to render
-	Extras(e string)
+	Extras(e tea.Model)
 	// Preview sets the preview to render
-	Preview(p string)
+	Preview(p tea.Model)
 }
 
 // HomeView holds the default implementation for the HomeViewBuilder
@@ -74,10 +77,10 @@ type HomeView struct {
 
 	title string
 
-	listView   string
-	listBar    string
-	listExtras string
-	preview    string
+	listView   tea.Model
+	listBar    tea.Model
+	listExtras tea.Model
+	preview    tea.Model
 }
 
 // NewHomeView returns a new HomeView with empty content.
@@ -96,22 +99,22 @@ func (hv *HomeView) Title(t string) {
 }
 
 // List sets the list to render
-func (hv *HomeView) List(l string) {
+func (hv *HomeView) List(l tea.Model) {
 	hv.listView = l
 }
 
 // Bar sets the list bar to render
-func (hv *HomeView) Bar(b string) {
+func (hv *HomeView) Bar(b tea.Model) {
 	hv.listBar = b
 }
 
 // Extras sets the extras to render
-func (hv *HomeView) Extras(e string) {
+func (hv *HomeView) Extras(e tea.Model) {
 	hv.listExtras = e
 }
 
 // Preview sets the preview to render
-func (hv *HomeView) Preview(p string) {
+func (hv *HomeView) Preview(p tea.Model) {
 	hv.preview = p
 }
 
@@ -158,28 +161,37 @@ func (hv *HomeView) appBoundaryView(text string) string {
 }
 
 func (hv *HomeView) decoratedList() string {
-	if hv.listView == "" {
+	if hv.listView == nil {
 		return "\n\n"
 	}
-	return hv.listView + "\n\n"
+	return hv.listView.View() + "\n\n"
 }
 
 func (hv *HomeView) decoratedListBarAndExtras() string {
 	var builder []string
-	if hv.listBar != "" {
-		builder = append(builder, hv.listBar)
+	if hv.listBar != nil {
+		builder = append(builder, hv.listBar.View())
 	}
-	if hv.listExtras != "" {
-		builder = append(builder, hv.listExtras)
+	if hv.listExtras != nil {
+		builder = append(builder, hv.listExtras.View())
 	}
 	return lipgloss.JoinHorizontal(lipgloss.Top, builder...) + "\n\n"
 }
 
 func (hv *HomeView) decoratedPreview() string {
-	if hv.preview == "" {
+	if hv.preview == nil {
 		return ""
 	}
-	return hv.preview + "\n\n"
+	return hv.preview.View() + "\n\n"
+}
+
+// markedText returns an string with its marked character (denoted by an `&`)
+// underlined by using ANSI escape codes
+func markedText(s string) string {
+	if idx := strings.Index(s, "&"); idx != -1 && idx+1 < len(s) {
+		return fmt.Sprintf("%s\033[4m%s\033[0m%s", s[:idx], string(s[idx+1]), s[idx+2:])
+	}
+	return s
 }
 
 func min(x, y int) int {
