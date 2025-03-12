@@ -15,19 +15,19 @@ const (
 	deleteDevice
 )
 
-// devicesActions is a list of options for the devices appliance.
 var devicesActions = map[devicesAction]string{
 	createDevice: markedText("➕ &Add Device"),
 	viewDevice:   markedText("📋 &View Devices"),
 	editDevice:   markedText("✏️ &Edit Device"),
 	deleteDevice: markedText("❌ &Delete Device")}
 
-// DevicesAppliance ...
+// DevicesAppliance is the tea.Model for the Devices appliance.
 type DevicesAppliance struct {
 	hv *HomeView
 }
 
-// NewDevicesAppliance ...
+// NewDevicesAppliance returns a new DevicesAppliance, with the following contents:
+//   - rendered title
 func NewDevicesAppliance() *DevicesAppliance {
 	d := &DevicesAppliance{
 		hv: NewHomeView(),
@@ -36,12 +36,16 @@ func NewDevicesAppliance() *DevicesAppliance {
 	return d
 }
 
-// Init ...
+// StatisticsAppliance implementation of tea.Model interface -------------------
+
+// Init is the first function that will be called. It returns an optional
+// initial command. To not perform an initial command return nil.
 func (d *DevicesAppliance) Init() tea.Cmd {
 	return nil
 }
 
-// Update ...
+// Update is called when a message is received. Use it to inspect messages
+// and, in response, update the model and/or send a command.
 func (d *DevicesAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -49,7 +53,7 @@ func (d *DevicesAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q", "ctrl+c":
 			return d, tea.Quit
 		case "esc":
-			return InitialMenuModel(), nil
+			return NewMenuModel(), nil
 		}
 	}
 
@@ -60,7 +64,8 @@ func (d *DevicesAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return d, cmd
 }
 
-// View ...
+// View renders the DevicesAppliance UI, which is just a string. The view is
+// rendered after every Update.
 func (d *DevicesAppliance) View() string {
 	return d.hv.View()
 }

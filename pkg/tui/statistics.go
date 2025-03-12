@@ -14,18 +14,18 @@ const (
 	dosageTracker
 )
 
-// statisticsActions is a list of options for the stats appliance.
 var statisticsActions = map[statisticsAction]string{
 	usageHistory:  markedText("📅 &Usage History"),
 	trends:        markedText("📈 &Trends"),
 	dosageTracker: markedText("🔢 &Dosage Tracker")}
 
-// StatisticsAppliance ...
+// StatisticsAppliance is the tea.Model for the Statistics appliance.
 type StatisticsAppliance struct {
 	hv *HomeView
 }
 
-// NewStatisticsAppliance ...
+// NewStatisticsAppliance returns a new StatisticsAppliance, with the following contents:
+//   - rendered title
 func NewStatisticsAppliance() *StatisticsAppliance {
 	s := &StatisticsAppliance{
 		hv: NewHomeView(),
@@ -34,12 +34,16 @@ func NewStatisticsAppliance() *StatisticsAppliance {
 	return s
 }
 
-// Init ...
+// StatisticsAppliance implementation of tea.Model interface -------------------
+
+// Init is the first function that will be called. It returns an optional
+// initial command. To not perform an initial command return nil.
 func (s *StatisticsAppliance) Init() tea.Cmd {
 	return nil
 }
 
-// Update ...
+// Update is called when a message is received. Use it to inspect messages
+// and, in response, update the model and/or send a command.
 func (s *StatisticsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -47,7 +51,7 @@ func (s *StatisticsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q", "ctrl+c":
 			return s, tea.Quit
 		case "esc":
-			return InitialMenuModel(), nil
+			return NewMenuModel(), nil
 		}
 	}
 
@@ -57,7 +61,8 @@ func (s *StatisticsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return s, cmd
 }
 
-// View ...
+// View renders the StatisticsAppliance UI, which is just a string. The view is
+// rendered after every Update.
 func (s *StatisticsAppliance) View() string {
 	return s.hv.View()
 }

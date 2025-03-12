@@ -7,25 +7,26 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-// Appliances is a list of options for the main menu.
-var Appliances = []string{
+var appliances = []string{
 	markedText("🌿 &Strains"),
 	markedText("🚀 &Devices"),
 	markedText("🔧 S&ettings"),
 	markedText("📊 S&tatistics")}
 
-// MenuModel is the model for the main menu.
+// MenuModel is the tea.Model for the main menu.
 type MenuModel struct {
 	cursor int
 	items  []string
 }
 
-// InitialMenuModel returns the initial model for the main menu.
-func InitialMenuModel() MenuModel {
+// NewMenuModel returns the initial model for the main menu.
+func NewMenuModel() MenuModel {
 	return MenuModel{
-		items: Appliances,
+		items: appliances,
 	}
 }
+
+// MenuModel implementation of tea.Model interface -----------------------------
 
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
@@ -63,7 +64,7 @@ func (m MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "enter":
 			return onMenuSelected(m)
 		case "esc":
-			return InitialMenuModel(), nil
+			return NewMenuModel(), nil
 		}
 	}
 	return m, nil

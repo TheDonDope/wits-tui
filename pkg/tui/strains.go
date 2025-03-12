@@ -27,7 +27,6 @@ const (
 	deleteStrain
 )
 
-// strainsActions is a list of options for the strains appliance.
 var strainsActions = map[strainsAction]string{
 	addStrain:    markedText("➕ &Add Strain"),
 	viewStrain:   markedText("📋 &View Strains"),
@@ -39,12 +38,13 @@ var (
 	strainService service.StrainService
 )
 
-// StrainsAppliance ...
+// StrainsAppliance is the tea.Model for the Strains appliance
 type StrainsAppliance struct {
 	hv *HomeView
 }
 
-// NewStrainsAppliance ...
+// NewStrainsAppliance returns a new StrainsAppliance, with the following contents:
+//   - rendered title
 func NewStrainsAppliance() *StrainsAppliance {
 	sstr, err := storage.NewStrainStoreYMLFile()
 	if err != nil {
@@ -57,16 +57,20 @@ func NewStrainsAppliance() *StrainsAppliance {
 		hv: NewHomeView(),
 	}
 	s.hv.Title(breadcrumbTitle(s.hv.title, strainsTitle))
-	// s.hv.List(ListStrains())
+	//s.hv.List(ListStrains())
 	return s
 }
 
-// Init ...
+// StrainsAppliance implementation of tea.Model interface ----------------------
+
+// Init is the first function that will be called. It returns an optional
+// initial command. To not perform an initial command return nil.
 func (s *StrainsAppliance) Init() tea.Cmd {
 	return nil
 }
 
-// Update ...
+// Update is called when a message is received. Use it to inspect messages
+// and, in response, update the model and/or send a command.
 func (s *StrainsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -74,7 +78,7 @@ func (s *StrainsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q", "ctrl+c":
 			return s, tea.Quit
 		case "esc":
-			return InitialMenuModel(), nil
+			return NewMenuModel(), nil
 		}
 	}
 
@@ -84,7 +88,8 @@ func (s *StrainsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return s, cmd
 }
 
-// View ...
+// View renders the StrainsAppliance UI, which is just a string. The view is
+// rendered after every Update.
 func (s *StrainsAppliance) View() string {
 	return s.hv.View()
 }
@@ -185,7 +190,7 @@ func newStrainForm() *huh.Form {
 	)
 }
 
-// newStrainFromForm creates a new strain from the form data.
+// newStrainFromForm creates a new strain entity from the given form data.
 func newStrainFromForm(form *huh.Form) *can.Strain {
 	thc, err := strconv.ParseFloat(form.GetString("thc"), 64)
 	if err != nil {
@@ -234,7 +239,10 @@ type StrainsListItem struct {
 	value *can.Strain
 }
 
-// FilterValue returns the filter value for the list item.
+// StrainsListItem implementation of list.Item interface -----------------------
+
+// FilterValue is the value we use when filtering against this item when
+// we're filtering the list.
 func (sli StrainsListItem) FilterValue() string {
 	return sli.value.Cultivar
 }
@@ -249,7 +257,7 @@ func (sli StrainsListItem) Description() string {
 	return fmt.Sprintf("Genetic: %s, THC/CBD: %.1f%% %.1f%%", can.Genetics[sli.value.Genetic], sli.value.THC, sli.value.CBD)
 }
 
-// StrainsListModel is a model for the strains list.
+// StrainsListModel is a tea.Model for the strains list.
 type StrainsListModel struct {
 	list list.Model
 }
@@ -262,17 +270,21 @@ func ListStrains() *StrainsListModel {
 	}
 
 	l := list.New(items, list.NewDefaultDelegate(), 60, 30)
-	l.Title = "🌿 Strains"
+	l.Title = "Entries"
 
 	return &StrainsListModel{list: l}
 }
 
-// Init initializes the strains list model.
+// StrainsListModel implementation of tea.Model interface ----------------------
+
+// Init is the first function that will be called. It returns an optional
+// initial command. To not perform an initial command return nil.
 func (slm StrainsListModel) Init() tea.Cmd {
 	return nil
 }
 
-// Update updates the strains list model.
+// Update is called when a message is received. Use it to inspect messages
+// and, in response, update the model and/or send a command.
 func (slm StrainsListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -287,7 +299,8 @@ func (slm StrainsListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return slm, cmd
 }
 
-// View renders the strains list model.
+// View renders the StrainListModel UI, which is just a string. The view is
+// rendered after every Update.
 func (slm StrainsListModel) View() string {
 	return slm.list.View()
 }

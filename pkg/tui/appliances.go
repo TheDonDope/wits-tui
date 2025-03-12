@@ -71,7 +71,8 @@ type HomeViewBuilder interface {
 	Preview(p tea.Model)
 }
 
-// HomeView holds the default implementation for the HomeViewBuilder
+// HomeView implements both tui.HomeViewBuilder and tea.Model interfaces to
+// act as a base for the applications appliances.
 type HomeView struct {
 	lg     *lipgloss.Renderer
 	styles *Styles
@@ -93,7 +94,7 @@ func NewHomeView() *HomeView {
 	return m
 }
 
-// HomeViewBuilder interface ---------------------------------------------------
+// HomeView implementation of tui.HomeViewBuilder interface --------------------
 
 // Title sets the title to render
 func (hv *HomeView) Title(t string) {
@@ -120,14 +121,16 @@ func (hv *HomeView) Preview(p tea.Model) {
 	hv.preview = p
 }
 
-// tea.Model interface ---------------------------------------------------------
+// HomeView implementation of tea.Model interface ------------------------------
 
-// Init ...
+// Init is the first function that will be called. It returns an optional
+// initial command. To not perform an initial command return nil.
 func (hv *HomeView) Init() tea.Cmd {
 	return nil
 }
 
-// Update ...
+// Update is called when a message is received. Use it to inspect messages
+// and, in response, update the model and/or send a command.
 func (hv *HomeView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -141,7 +144,8 @@ func (hv *HomeView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return hv, tea.Batch(cmds...)
 }
 
-// View ...
+// View renders the HomeView, which is just a string. The view is
+// rendered after every Update.
 func (hv *HomeView) View() string {
 	s := hv.styles
 
@@ -152,6 +156,7 @@ func (hv *HomeView) View() string {
 	return s.Base.Render(header + "\n" + body)
 }
 
+// appBoundaryView returns boundary view for the application with the given text.
 func (hv *HomeView) appBoundaryView(text string) string {
 	return lipgloss.PlaceHorizontal(
 		hv.width,
@@ -162,6 +167,8 @@ func (hv *HomeView) appBoundaryView(text string) string {
 	)
 }
 
+// decoratedList returns the rendered list view, if existing, or otherwise empty
+// content.
 func (hv *HomeView) decoratedList() string {
 	if hv.listView == nil {
 		return "\n\n"
@@ -169,6 +176,8 @@ func (hv *HomeView) decoratedList() string {
 	return hv.listView.View() + "\n\n"
 }
 
+// decoratedListBarAndExtras returns the rendered list bar and extras, depending
+// on their existence.
 func (hv *HomeView) decoratedListBarAndExtras() string {
 	var b strings.Builder
 	if hv.listBar != nil {
@@ -180,6 +189,8 @@ func (hv *HomeView) decoratedListBarAndExtras() string {
 	return lipgloss.JoinHorizontal(lipgloss.Top, b.String()) + "\n\n"
 }
 
+// decoratedPreview returns the rendered preview, if existing, or otherwise
+// empty content
 func (hv *HomeView) decoratedPreview() string {
 	if hv.preview == nil {
 		return ""
