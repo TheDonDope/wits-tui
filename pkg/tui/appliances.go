@@ -11,6 +11,8 @@ import (
 // MaxWidth defines the maximum boundaries the application has to adhere to
 const MaxWidth = 120
 
+const homeTitle = "🥦 Wits"
+
 var (
 	red    = lipgloss.AdaptiveColor{Light: "#FE5F86", Dark: "#FE5F86"}
 	indigo = lipgloss.AdaptiveColor{Light: "#5A56E0", Dark: "#7571F9"}
@@ -85,7 +87,7 @@ type HomeView struct {
 
 // NewHomeView returns a new HomeView with empty content.
 func NewHomeView() *HomeView {
-	m := &HomeView{width: MaxWidth}
+	m := &HomeView{width: MaxWidth, title: homeTitle}
 	m.lg = lipgloss.DefaultRenderer()
 	m.styles = NewStyles(m.lg)
 	return m
@@ -194,9 +196,13 @@ func markedText(s string) string {
 	return s
 }
 
-func min(x, y int) int {
-	if x > y {
-		return y
+func breadcrumbTitle(nodes ...string) string {
+	var builder strings.Builder
+	for i, node := range nodes {
+		builder.WriteString(node)
+		if i < len(nodes)-1 {
+			builder.WriteString(" > ")
+		}
 	}
-	return x
+	return builder.String()
 }

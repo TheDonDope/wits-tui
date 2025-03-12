@@ -1,8 +1,10 @@
 package tui
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	tea "github.com/charmbracelet/bubbletea"
+)
 
-const settingsTitle = "Settings"
+const settingsTitle = "🔧 Settings"
 
 type settingsAction int
 
@@ -30,7 +32,7 @@ func NewSettingsAppliance() *SettingsAppliance {
 	s := &SettingsAppliance{
 		hv: NewHomeView(),
 	}
-	s.hv.Title(settingsTitle)
+	s.hv.Title(breadcrumbTitle(s.hv.title, settingsTitle))
 	return s
 }
 

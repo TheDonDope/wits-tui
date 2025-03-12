@@ -12,7 +12,7 @@ var Appliances = []string{
 	markedText("🌿 &Strains"),
 	markedText("🚀 &Devices"),
 	markedText("🔧 S&ettings"),
-	markedText("📊 S&tats")}
+	markedText("📊 S&tatistics")}
 
 // MenuModel is the model for the main menu.
 type MenuModel struct {
@@ -94,7 +94,7 @@ func onMenuSelected(m MenuModel) (tea.Model, tea.Cmd) {
 	case 2:
 		return NewSettingsAppliance(), nil
 	case 3:
-		return NewStatsAppliance(), nil
+		return NewStatisticsAppliance(), nil
 	}
 	return m, nil
 }

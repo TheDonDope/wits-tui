@@ -16,7 +16,7 @@ import (
 	"github.com/google/uuid"
 )
 
-const strainsTitle = "Strains"
+const strainsTitle = "🌿 Strains"
 
 type strainsAction int
 
@@ -56,7 +56,7 @@ func NewStrainsAppliance() *StrainsAppliance {
 	s := &StrainsAppliance{
 		hv: NewHomeView(),
 	}
-	s.hv.Title(strainsTitle)
+	s.hv.Title(breadcrumbTitle(s.hv.title, strainsTitle))
 	// s.hv.List(ListStrains())
 	return s
 }
