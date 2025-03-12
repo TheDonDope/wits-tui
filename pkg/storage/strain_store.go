@@ -2,6 +2,7 @@ package storage
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"sync"
 
@@ -9,7 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const strainsFile = ".wits/strains.yml"
+var strainsFile = fmt.Sprintf("%s/strains.yml", witsFolder)
 
 var (
 	// ErrStrainNotFound is returned when a strain is not found in the store.

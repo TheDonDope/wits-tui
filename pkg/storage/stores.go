@@ -4,6 +4,8 @@ import (
 	"os"
 )
 
+const witsFolder = ".wits"
+
 // PersistanceType is the enum for the different types of data storage.
 type PersistanceType int
 
@@ -16,8 +18,7 @@ const (
 
 // EnsureWitsFolder creates the `.wits` directory if missing.
 func EnsureWitsFolder() error {
-	folder := ".wits"
-	return os.MkdirAll(folder, os.ModePerm)
+	return os.MkdirAll(witsFolder, os.ModePerm)
 }
 
 // ReadFile reads the contents of the file with the given name (path).
