@@ -18,7 +18,7 @@ func main() {
 		os.Exit(1)
 	}
 	strainService := service.NewStrainService(strainStore)
-	_, err = tea.NewProgram(tui.InitialMenuModel(strainService, strainStore)).Run()
+	_, err = tea.NewProgram(tui.InitialMenuModel(strainService, strainStore), tea.WithAltScreen()).Run()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error starting program: %v", err)
 		os.Exit(1)
