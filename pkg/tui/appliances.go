@@ -130,9 +130,7 @@ func (hv *HomeView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c":
-			return hv, tea.Interrupt
-		case "esc", "q":
+		case "esc", "q", "ctrl+c":
 			return hv, tea.Quit
 		}
 	}
