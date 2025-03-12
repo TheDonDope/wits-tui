@@ -30,12 +30,12 @@ func NewSettingsAppliance() *SettingsAppliance {
 	s := &SettingsAppliance{
 		hv: NewHomeView(),
 	}
+	s.hv.Title(settingsTitle)
 	return s
 }
 
 // Init ...
 func (s *SettingsAppliance) Init() tea.Cmd {
-	s.hv.title = settingsTitle
 	return nil
 }
 

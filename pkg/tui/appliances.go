@@ -57,13 +57,13 @@ type HomeViewBuilder interface {
 	// Title sets the title to render
 	Title(t string)
 	// List sets the list to render
-	List(l tea.Model)
+	List(l string)
 	// Bar sets the list bar to render
-	Bar(b tea.Model)
+	Bar(b string)
 	// Extras sets the extras to render
-	Extras(e tea.Model)
+	Extras(e string)
 	// Preview sets the preview to render
-	Preview(p tea.Model)
+	Preview(p string)
 }
 
 // HomeView holds the default implementation for the HomeViewBuilder
@@ -72,15 +72,12 @@ type HomeView struct {
 	styles *Styles
 	width  int
 
-	title      string
-	titleLabel tea.Model
+	title string
 
-	listView   tea.Model
-	listBar    tea.Model
-	listExtras tea.Model
-	preview    tea.Model
-
-	panel tea.Model
+	listView   string
+	listBar    string
+	listExtras string
+	preview    string
 }
 
 // NewHomeView returns a new HomeView with empty content.
@@ -99,22 +96,22 @@ func (hv *HomeView) Title(t string) {
 }
 
 // List sets the list to render
-func (hv *HomeView) List(l tea.Model) {
+func (hv *HomeView) List(l string) {
 	hv.listView = l
 }
 
 // Bar sets the list bar to render
-func (hv *HomeView) Bar(b tea.Model) {
+func (hv *HomeView) Bar(b string) {
 	hv.listBar = b
 }
 
 // Extras sets the extras to render
-func (hv *HomeView) Extras(e tea.Model) {
+func (hv *HomeView) Extras(e string) {
 	hv.listExtras = e
 }
 
 // Preview sets the preview to render
-func (hv *HomeView) Preview(p tea.Model) {
+func (hv *HomeView) Preview(p string) {
 	hv.preview = p
 }
 
@@ -161,28 +158,28 @@ func (hv *HomeView) appBoundaryView(text string) string {
 }
 
 func (hv *HomeView) decoratedList() string {
-	if hv.listView == nil {
+	if hv.listView == "" {
 		return "\n\n"
 	}
-	return hv.listView.View() + "\n\n"
+	return hv.listView + "\n\n"
 }
 
 func (hv *HomeView) decoratedListBarAndExtras() string {
 	var builder []string
-	if hv.listBar != nil {
-		builder = append(builder, hv.listBar.View())
+	if hv.listBar != "" {
+		builder = append(builder, hv.listBar)
 	}
-	if hv.listExtras != nil {
-		builder = append(builder, hv.listExtras.View())
+	if hv.listExtras != "" {
+		builder = append(builder, hv.listExtras)
 	}
 	return lipgloss.JoinHorizontal(lipgloss.Top, builder...) + "\n\n"
 }
 
 func (hv *HomeView) decoratedPreview() string {
-	if hv.preview == nil {
+	if hv.preview == "" {
 		return ""
 	}
-	return hv.preview.View() + "\n\n"
+	return hv.preview + "\n\n"
 }
 
 func min(x, y int) int {

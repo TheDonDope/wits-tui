@@ -28,12 +28,12 @@ func NewStatsAppliance() *StatsAppliance {
 	s := &StatsAppliance{
 		hv: NewHomeView(),
 	}
+	s.hv.Title(statsTitle)
 	return s
 }
 
 // Init ...
 func (s *StatsAppliance) Init() tea.Cmd {
-	s.hv.title = statsTitle
 	return nil
 }
 

@@ -30,12 +30,12 @@ func NewDevicesAppliance() *DevicesAppliance {
 	d := &DevicesAppliance{
 		hv: NewHomeView(),
 	}
+	d.hv.Title(devicesTitle)
 	return d
 }
 
 // Init ...
 func (d *DevicesAppliance) Init() tea.Cmd {
-	d.hv.title = devicesTitle
 	return nil
 }
 

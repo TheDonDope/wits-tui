@@ -46,15 +46,6 @@ type StrainsAppliance struct {
 
 // NewStrainsAppliance ...
 func NewStrainsAppliance() *StrainsAppliance {
-	s := &StrainsAppliance{
-		hv: NewHomeView(),
-	}
-	return s
-}
-
-// Init ...
-func (s *StrainsAppliance) Init() tea.Cmd {
-	s.hv.title = settingsTitle
 	sstr, err := storage.NewStrainStoreYMLFile()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error loading data from YML File: %v", err)
@@ -62,6 +53,16 @@ func (s *StrainsAppliance) Init() tea.Cmd {
 	}
 	strainStore = sstr
 	strainService = service.NewStrainService(strainStore)
+	s := &StrainsAppliance{
+		hv: NewHomeView(),
+	}
+	s.hv.Title(strainsTitle)
+	s.hv.List(ListStrains().View())
+	return s
+}
+
+// Init ...
+func (s *StrainsAppliance) Init() tea.Cmd {
 	return nil
 }
 
@@ -216,7 +217,7 @@ func newStrainFromForm(form *huh.Form) *can.Strain {
 }
 
 // AddStrain opens a form for adding a new strain and returns the created strain object.
-func AddStrain(svc service.StrainService) tea.Model {
+func AddStrain() tea.Model {
 	form := newStrainForm()
 
 	if err := form.Run(); err != nil {
@@ -224,8 +225,8 @@ func AddStrain(svc service.StrainService) tea.Model {
 		os.Exit(1)
 	}
 	strain := newStrainFromForm(form)
-	svc.AddStrain(strain)
-	return ListStrains(svc)
+	strainService.AddStrain(strain)
+	return ListStrains()
 }
 
 // StrainsListItem is a list item for strains.
@@ -250,21 +251,20 @@ func (sli StrainsListItem) Description() string {
 
 // StrainsListModel is a model for the strains list.
 type StrainsListModel struct {
-	list    list.Model
-	service service.StrainService
+	list list.Model
 }
 
 // ListStrains creates a new model for the strains list.
-func ListStrains(svc service.StrainService) *StrainsListModel {
+func ListStrains() *StrainsListModel {
 	items := []list.Item{}
-	for _, strain := range svc.GetStrains() {
+	for _, strain := range strainService.GetStrains() {
 		items = append(items, StrainsListItem{value: strain})
 	}
 
 	l := list.New(items, list.NewDefaultDelegate(), 60, 30)
 	l.Title = "🌿 Strains"
 
-	return &StrainsListModel{list: l, service: svc}
+	return &StrainsListModel{list: l}
 }
 
 // Init initializes the strains list model.
