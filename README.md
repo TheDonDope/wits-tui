@@ -16,13 +16,28 @@ go build -v -o ./bin/wits ./cmd/wits/main.go
 After building, simply invoke:
 
 ```shell
-$ ./bin/wits
 🥦 Welcome to Wits!
 
-> (1): 🌿 Strains
- (2): 🚀 Devices
- (3): 🔧 Settings
- (4): 📊 Stats
+> 🌿 Strains
+ 🚀 Devices
+ 🔧 Settings
+ 📊 Statistics
+
+Press ctrl+c or q to quit.
+```
+
+Or, do it all in one step by invoking:
+
+```shell
+$ make
+go build -v -o ./bin/wits ./cmd/wits/main.go
+
+🥦 Welcome to Wits!
+
+> 🌿 Strains
+ 🚀 Devices
+ 🔧 Settings
+ 📊 Statistics
 
 Press ctrl+c or q to quit.
 ```
