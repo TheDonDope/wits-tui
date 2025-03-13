@@ -91,9 +91,6 @@ func (sstr *StrainStoreType) GetStrains() []*can.Strain {
 	for _, s := range sstr.Strains {
 		strains = append(strains, s)
 	}
-	// create a dummy strain for test data
-	dummy := &can.Strain{Manufacturer: "Dope", Strain: "Dope OG 25/1", Cultivar: "Dope OG", THC: 25.0, CBD: 1.0}
-	strains = append(strains, dummy)
 	return strains
 }
 

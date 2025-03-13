@@ -33,12 +33,16 @@ var strainsActions = map[strainsAction]string{
 	editStrain:   markedText("✏️ &Edit Strain"),
 	deleteStrain: markedText("❌ &Delete Strain")}
 
-type strainSubmittedMsg struct {
-	strain *can.Strain
+type strainsStoreInitializedMsg struct {
+	err error
 }
 
 type strainsListedMsg struct {
 	items []list.Item
+}
+
+type strainSubmittedMsg struct {
+	strain *can.Strain
 }
 
 // StrainsHomeModel is the tea.Model for the Strains appliance
@@ -51,20 +55,27 @@ type StrainsHomeModel struct {
 // initialStrainsHomeModel returns a new StrainsHomeModel, with the following contents:
 //   - rendered title
 func initialStrainsHomeModel() *StrainsHomeModel {
-	// TODO: consider using a tea.Cmd side effect
-	fileStore, err := storage.NewStrainStoreYMLFile()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading data from YML File: %v", err)
-	}
-	svc := service.NewStrainService(fileStore)
 	s := &StrainsHomeModel{
-		hm:      initialHomeModel(),
-		store:   fileStore,
-		service: svc,
+		hm: initialHomeModel(),
 	}
 	s.hm.Title(breadcrumbTitle(s.hm.title, strainsTitle))
-	// s.hm.List(initialStrainListModel())
+	s.hm.List(initialStrainListModel())
 	return s
+}
+
+// onStoreInitializing configures and creates the store and service that the
+// model uses and upon completion sends a message, including an error if occured.
+func (shm *StrainsHomeModel) onStoreInitializing() tea.Cmd {
+	return func() tea.Msg {
+		fileStore, err := storage.NewStrainStoreYMLFile()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error loading data from YML File: %v", err)
+		}
+		svc := service.NewStrainService(fileStore)
+		shm.store = fileStore
+		shm.service = svc
+		return strainsStoreInitializedMsg{err}
+	}
 }
 
 // StrainsHomeModel implementation of tea.Model interface ----------------------
@@ -72,7 +83,7 @@ func initialStrainsHomeModel() *StrainsHomeModel {
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
 func (shm *StrainsHomeModel) Init() tea.Cmd {
-	return shm.onStrainsListed()
+	return shm.onStoreInitializing()
 }
 
 // Update is called when a message is received. Use it to inspect messages
@@ -88,10 +99,14 @@ func (shm *StrainsHomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "alt+n":
 			return shm, onStrainAdded()
 		}
+	case strainsStoreInitializedMsg:
+		if msg.err != nil {
+			return shm, shm.onStrainsListed()
+		}
 	case strainSubmittedMsg:
 		shm.service.AddStrain(msg.strain)
 		// TODO: redirect to home view?
-		return shm, nil
+		return shm, shm.onStrainsListed()
 	case strainsListedMsg:
 		shm.hm.listView.Update(msg)
 	}
@@ -108,7 +123,8 @@ func (shm *StrainsHomeModel) View() string {
 	return shm.hm.View()
 }
 
-// onStrainsListed returns all strains from the service as a tea.Cmd to be handled in Update()
+// onStrainsListed retrieves all strains from the service and returns a message
+// containing the results as an slice of list items.
 func (shm *StrainsHomeModel) onStrainsListed() tea.Cmd {
 	return func() tea.Msg {
 		items := []list.Item{}
@@ -119,8 +135,8 @@ func (shm *StrainsHomeModel) onStrainsListed() tea.Cmd {
 	}
 }
 
-// onStrainAdded runs the form to add a strain and returns it as a tea.Cmd to be handled in Update()
-// TODO: hook up to addStrain strainsAction
+// onStrainAdded runs the form to add a strain and on submission sends a message
+// with the parsed strain data from the form.
 func onStrainAdded() tea.Cmd {
 	return func() tea.Msg {
 		form := initialStrainForm()
