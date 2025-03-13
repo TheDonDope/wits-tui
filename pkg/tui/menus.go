@@ -3,7 +3,6 @@ package tui
 import (
 	"fmt"
 
-	"github.com/TheDonDope/wits-tui/pkg/storage"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -31,7 +30,6 @@ func InitialMenuModel() MenuModel {
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
 func (m MenuModel) Init() tea.Cmd {
-	storage.EnsureWitsFolder()
 	return nil
 }
 

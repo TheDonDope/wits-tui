@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var strainsFile = fmt.Sprintf("%s/strains.yml", witsFolder)
+var strainsFile = fmt.Sprintf("%s/strains.yml", os.Getenv("WITS_DIR"))
 
 var (
 	// ErrStrainNotFound is returned when a strain is not found in the store.
@@ -89,7 +89,7 @@ func (ssyf *StrainStoreYMLFile) AddStrain(s *can.Strain) error {
 	if err != nil {
 		return err
 	}
-	return WriteFile(strainsFile, data)
+	return os.WriteFile(strainsFile, data, 0644)
 }
 
 // GetStrains returns all strains in the store as a slice.
@@ -124,7 +124,18 @@ func NewStrainStore() StrainStore {
 	case StoreInMemory:
 		return &StrainStoreInMemory{}
 	case StoreYMLFile:
-		return &StrainStoreYMLFile{}
+		ssyf := &StrainStoreYMLFile{}
+		data, err := os.ReadFile(strainsFile)
+		if err != nil {
+			if os.IsNotExist(err) {
+				return ssyf
+			}
+		}
+		err = yaml.Unmarshal(data, ssyf.strains)
+		if err != nil {
+			return nil
+		}
+		return ssyf
 	}
 	return nil
 }
