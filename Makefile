@@ -8,6 +8,9 @@ install:
 build:
 	go build -v -o ./bin/wits ./cmd/wits/main.go
 
+build-windows:
+	GOOS=windows GOARCH=amd64 go build -v -o ./bin/wits.exe ./cmd/wits/main.go
+
 clean:
 	rm -f ./bin/wits
 	rm -f coverage.html
