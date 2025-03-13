@@ -63,7 +63,7 @@ func initialStrainsHomeModel() *StrainsHomeModel {
 		service: svc,
 	}
 	s.hm.Title(breadcrumbTitle(s.hm.title, strainsTitle))
-	s.hm.List(initialStrainListModel())
+	// s.hm.List(initialStrainListModel())
 	return s
 }
 
@@ -85,6 +85,8 @@ func (shm *StrainsHomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return shm, tea.Quit
 		case "esc":
 			return InitialMenuModel(), nil
+		case "alt+n":
+			return shm, onStrainAdded()
 		}
 	case strainSubmittedMsg:
 		shm.service.AddStrain(msg.strain)
@@ -298,13 +300,13 @@ func initialStrainListModel() *StrainListModel {
 
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
-func (slm StrainListModel) Init() tea.Cmd {
+func (slm *StrainListModel) Init() tea.Cmd {
 	return nil
 }
 
 // Update is called when a message is received. Use it to inspect messages
 // and, in response, update the model and/or send a command.
-func (slm StrainListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (slm *StrainListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -322,6 +324,6 @@ func (slm StrainListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 // View renders the StrainListModel UI, which is just a string. The view is
 // rendered after every Update.
-func (slm StrainListModel) View() string {
+func (slm *StrainListModel) View() string {
 	return slm.list.View()
 }
