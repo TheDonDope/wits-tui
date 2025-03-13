@@ -33,7 +33,15 @@ var strainsActions = map[strainsAction]string{
 	editStrain:   markedText("✏️ &Edit Strain"),
 	deleteStrain: markedText("❌ &Delete Strain")}
 
+var (
+	sortedGenetics  = sortedGeneticsList()
+	sortedRadiation = sortedRadiationList()
+	sortedTerpenes  = sortedTerpenesList()
+)
+
 type strainsStoreInitializedMsg struct {
+	str storage.StrainStore
+	svc service.StrainService
 	err error
 }
 
@@ -70,11 +78,10 @@ func (shm *StrainsHomeModel) onStoreInitializing() tea.Cmd {
 		fileStore, err := storage.NewStrainStoreYMLFile()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error loading data from YML File: %v", err)
+			return strainsStoreInitializedMsg{nil, nil, err}
 		}
 		svc := service.NewStrainService(fileStore)
-		shm.store = fileStore
-		shm.service = svc
-		return strainsStoreInitializedMsg{err}
+		return strainsStoreInitializedMsg{fileStore, svc, nil}
 	}
 }
 
@@ -96,13 +103,17 @@ func (shm *StrainsHomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return shm, tea.Quit
 		case "esc":
 			return InitialMenuModel(), nil
-		case "alt+n":
+		case "alt+n", "ctrl+n":
 			return shm, onStrainAdded()
 		}
 	case strainsStoreInitializedMsg:
 		if msg.err != nil {
-			return shm, shm.onStrainsListed()
+			fmt.Fprintf(os.Stderr, "Failed to initialize strain store: %v\n", msg.err)
+			return shm, nil
 		}
+		shm.store = msg.str
+		shm.service = msg.svc
+		return shm, shm.onStrainsListed()
 	case strainSubmittedMsg:
 		shm.service.AddStrain(msg.strain)
 		// TODO: redirect to home view?
@@ -128,8 +139,19 @@ func (shm *StrainsHomeModel) View() string {
 func (shm *StrainsHomeModel) onStrainsListed() tea.Cmd {
 	return func() tea.Msg {
 		items := []list.Item{}
-		for _, strain := range shm.service.GetStrains() {
-			items = append(items, StrainListItem{value: strain})
+		strains := shm.service.GetStrains()
+
+		if len(strains) == 0 {
+			items = append(items, StrainListItem{value: &can.Strain{
+				Strain:   "No strains available, press alt+n to create a new one.",
+				Cultivar: "",
+				THC:      0,
+				CBD:      0,
+			}})
+		} else {
+			for _, strain := range strains {
+				items = append(items, StrainListItem{value: strain})
+			}
 		}
 		return strainsListedMsg{items}
 	}
@@ -143,14 +165,18 @@ func onStrainAdded() tea.Cmd {
 
 		if err := form.Run(); err != nil {
 			fmt.Fprintf(os.Stderr, "Error running strain creation form: %v\n", err)
+			return nil // Return nil to prevent further processing
 		}
 		strain := parseStrain(form)
+		if strain == nil {
+			return nil // Do nothing if the user canceled or input was invalid
+		}
 		return strainSubmittedMsg{strain}
 	}
 }
 
-// geneticsOptions returns a list of genetic options for the user to choose from.
-func geneticsOptions() []huh.Option[can.GeneticType] {
+// sortedGeneticsList returns a list of genetic options for the user to choose from.
+func sortedGeneticsList() []huh.Option[can.GeneticType] {
 	var genetics []huh.Option[can.GeneticType]
 	for k, v := range can.Genetics {
 		genetics = append(genetics, huh.NewOption(v, k))
@@ -161,8 +187,8 @@ func geneticsOptions() []huh.Option[can.GeneticType] {
 	return genetics
 }
 
-// radiationOptions returns a list of options for radiation treatment for the user to choose from.
-func radiationOptions() []huh.Option[bool] {
+// sortedRadiationList returns a list of options for radiation treatment for the user to choose from.
+func sortedRadiationList() []huh.Option[bool] {
 	var radiations []huh.Option[bool]
 	radiations = append(radiations, huh.NewOption("No", false))
 	radiations = append(radiations, huh.NewOption("Yes", true))
@@ -173,8 +199,8 @@ func radiationOptions() []huh.Option[bool] {
 	return radiations
 }
 
-// terpeneOptions returns a list of terpene options for the user to choose from.
-func terpeneOptions() []huh.Option[*can.Terpene] {
+// sortedTerpenesList returns a list of terpene options for the user to choose from.
+func sortedTerpenesList() []huh.Option[*can.Terpene] {
 	var terpenes []huh.Option[*can.Terpene]
 	for _, t := range can.Terpenes {
 		terpenes = append(terpenes, huh.NewOption(t.Name, t))
@@ -211,13 +237,13 @@ func initialStrainForm() *huh.Form {
 
 			huh.NewSelect[can.GeneticType]().
 				Key("genetic").
-				Options(geneticsOptions()...).
+				Options(sortedGenetics...).
 				Title("Genetic").
 				Description("The phenotype"),
 
 			huh.NewSelect[bool]().
 				Key("radiated").
-				Options(radiationOptions()...).
+				Options(sortedRadiation...).
 				Title("Radiated").
 				Description("If the plant was radiation treated"),
 
@@ -233,7 +259,7 @@ func initialStrainForm() *huh.Form {
 
 			huh.NewMultiSelect[*can.Terpene]().
 				Key("terpenes").
-				Options(terpeneOptions()...).
+				Options(sortedTerpenes...).
 				Title("Terpenes").
 				Description("The contained terpenes"),
 
@@ -247,33 +273,45 @@ func initialStrainForm() *huh.Form {
 
 // parseStrain creates a new strain entity from the given form data.
 func parseStrain(form *huh.Form) *can.Strain {
-	thc, err := strconv.ParseFloat(form.GetString("thc"), 64)
-	if err != nil {
-		thc = 0
+	thc := parseFloatWithDefault(form.GetString("thc"), 0)
+	cbd := parseFloatWithDefault(form.GetString("cbd"), 0)
+	amount := parseFloatWithDefault(form.GetString("amount"), 0)
+
+	// Handle potential nil values
+	var genetic can.GeneticType
+	if val, ok := form.Get("genetic").(can.GeneticType); ok {
+		genetic = val
 	}
-	cbd, err := strconv.ParseFloat(form.GetString("cbd"), 64)
-	if err != nil {
-		cbd = 0
+
+	var terpenes []*can.Terpene
+	if val, ok := form.Get("terpenes").([]*can.Terpene); ok {
+		terpenes = val
 	}
-	amount, err := strconv.ParseFloat(form.GetString("amount"), 64)
-	if err != nil {
-		amount = 0
-	}
+
 	return &can.Strain{
 		ID:           uuid.New(),
 		Strain:       form.GetString("strain"),
 		Cultivar:     form.GetString("cultivar"),
 		Manufacturer: form.GetString("manufacturer"),
 		Country:      form.GetString("country"),
-		Genetic:      form.Get("genetic").(can.GeneticType),
+		Genetic:      genetic,
 		Radiated:     form.GetBool("radiated"),
 		THC:          thc,
 		CBD:          cbd,
-		Terpenes:     form.Get("terpenes").([]*can.Terpene),
+		Terpenes:     terpenes,
 		Amount:       amount,
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 	}
+}
+
+// parseFloatWithDefault parses the given input to a float64. If an error occurs
+// the given defaultValue is returned.
+func parseFloatWithDefault(input string, defaultValue float64) float64 {
+	if val, err := strconv.ParseFloat(input, 64); err == nil {
+		return val
+	}
+	return defaultValue
 }
 
 // StrainListItem is a list item for strains.
