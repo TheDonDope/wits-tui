@@ -6,31 +6,23 @@ Wits aims to help cannabis patients and users to manage and monitor their cannab
 
 A detailed changelog can be found in the [CHANGELOG.md](./CHANGELOG.md) and the current development progress is tracked in the [ROADMAP.md](./ROADMAP.md). We do not use GitHub Issues but instead track our features, bugfixes and refactorings there.
 
-## Building the Application
+## Configuring the Application & Required Environment Variables
 
-Building the binary requires only a single step:
+Wits can be configured through environment variables, detailed here:
 
-```shell
-$ make build
-go build -v -o ./bin/wits ./cmd/wits/main.go
-```
+| Environment Variable | Description                                                                 |
+| -------------------- | --------------------------------------------------------------------------- |
+| `LOG_LEVEL`          | The level at which to log (one of: `DEBUG`, `INFO`, `WARN`, `ERROR`, `OFF`) |
+| `LOG_DIR`            | The path to the directory for the application logs                          |
+| `LOG_FILE`           | The name of the file for the application logs (within `LOG_DIR`)            |
+| `WITS_DIR`           | The directory where the application stores its data (defaults to `.wits`)   |
+| `STORAGE_MODE`       | The persistance type to use (either `in-memory` or `yml-file`)              |
 
-## Running the Application
+A minimum viable `.env` file can be found at [.env.example](.env.example). Simply rename it to `.env` to be able to run the application with a yaml file based storage.
 
-After building, simply invoke:
+## Building & Running the Application
 
-```shell
-🥦 Welcome to Wits!
-
-> 🌿 Strains
- 🚀 Devices
- 🔧 Settings
- 📊 Statistics
-
-Press ctrl+c or q to quit.
-```
-
-Or, do it all in one step by invoking:
+Building the binary and running it requires only a simple invocation to `make`:
 
 ```shell
 $ make

@@ -75,13 +75,9 @@ func initialStrainsHomeModel() *StrainsHomeModel {
 // model uses and upon completion sends a message, including an error if occured.
 func (shm *StrainsHomeModel) onStoreInitializing() tea.Cmd {
 	return func() tea.Msg {
-		fileStore, err := storage.NewStrainStoreYMLFile()
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error loading data from YML File: %v", err)
-			return strainsStoreInitializedMsg{nil, nil, err}
-		}
-		svc := service.NewStrainService(fileStore)
-		return strainsStoreInitializedMsg{fileStore, svc, nil}
+		store := storage.NewStrainStore()
+		svc := service.NewStrainService(store)
+		return strainsStoreInitializedMsg{store, svc, nil}
 	}
 }
 

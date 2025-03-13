@@ -4,16 +4,13 @@ import (
 	"os"
 )
 
-const witsFolder = ".wits"
-
-// PersistanceType is the enum for the different types of data storage.
-type PersistanceType int
+var witsFolder = os.Getenv("WITS_DIR")
 
 const (
-	// InMemory defines that data is only persistant at runtime and will die with the programs exit.
-	InMemory PersistanceType = iota
-	// YMLFile defines that data will be loaded and persisted to disk to a specified YML file within the .wits folder.
-	YMLFile
+	// StoreInMemory defines that data is only persistant at runtime and will die with the programs exit.
+	StoreInMemory = "in-memory"
+	// StoreYMLFile defines that data will be loaded and persisted to disk to a specified YML file within the .wits folder.
+	StoreYMLFile = "yml-file"
 )
 
 // EnsureWitsFolder creates the `.wits` directory if missing.

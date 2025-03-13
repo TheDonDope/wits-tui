@@ -26,82 +26,105 @@ type StrainStore interface {
 	FindStrainByProduct(p string) (*can.Strain, error)
 }
 
-// StrainStoreType is a holder for a collection of strains.
-type StrainStoreType struct {
-	Persistance PersistanceType
-	mu          sync.Mutex
-	Strains     map[string]*can.Strain
-}
-
-// NewStrainStoreInMemory creates a new in-memory Strain store.
-func NewStrainStoreInMemory() *StrainStoreType {
-	return &StrainStoreType{
-		Persistance: InMemory,
-		Strains:     make(map[string]*can.Strain),
-	}
-}
-
-// NewStrainStoreYMLFile creates a new Strain store which persists data to a yml file in the .wits directory.
-func NewStrainStoreYMLFile() (*StrainStoreType, error) {
-	store := &StrainStoreType{
-		Persistance: YMLFile,
-		Strains:     make(map[string]*can.Strain),
-	}
-	data, err := ReadFile(strainsFile)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return store, nil
-		}
-		return nil, err
-	}
-	err = yaml.Unmarshal(data, store.Strains)
-	if err != nil {
-		return nil, err
-	}
-	return store, nil
+// StrainStoreInMemory is the in memory implementation of the StrainStore interface.
+type StrainStoreInMemory struct {
+	mu      sync.Mutex
+	strains map[string]*can.Strain
 }
 
 // AddStrain adds a strain to the store, using its product name as the key.
-func (sstr *StrainStoreType) AddStrain(s *can.Strain) error {
-	sstr.mu.Lock()
-	defer sstr.mu.Unlock()
+func (ssim *StrainStoreInMemory) AddStrain(s *can.Strain) error {
+	ssim.mu.Lock()
+	defer ssim.mu.Unlock()
 
-	if _, exists := sstr.Strains[s.Strain]; exists {
+	if _, exists := ssim.strains[s.Strain]; exists {
 		return ErrStrainAlreadyExists
 	}
-	sstr.Strains[s.Strain] = s
-
-	if sstr.Persistance == YMLFile {
-		data, err := yaml.Marshal(sstr.Strains)
-		if err != nil {
-			return err
-		}
-		return WriteFile(strainsFile, data)
-	}
-
+	ssim.strains[s.Strain] = s
 	return nil
 }
 
 // GetStrains returns all strains in the store as a slice.
-func (sstr *StrainStoreType) GetStrains() []*can.Strain {
-	sstr.mu.Lock()
-	defer sstr.mu.Unlock()
+func (ssim *StrainStoreInMemory) GetStrains() []*can.Strain {
+	ssim.mu.Lock()
+	defer ssim.mu.Unlock()
 
 	var strains []*can.Strain
-	for _, s := range sstr.Strains {
+	for _, s := range ssim.strains {
 		strains = append(strains, s)
 	}
 	return strains
 }
 
 // FindStrainByProduct finds a strain in the store by product name.
-func (sstr *StrainStoreType) FindStrainByProduct(p string) (*can.Strain, error) {
-	sstr.mu.Lock()
-	defer sstr.mu.Unlock()
+func (ssim *StrainStoreInMemory) FindStrainByProduct(p string) (*can.Strain, error) {
+	ssim.mu.Lock()
+	defer ssim.mu.Unlock()
 
-	strain, exists := sstr.Strains[p]
+	strain, exists := ssim.strains[p]
 	if !exists {
 		return nil, ErrStrainNotFound
 	}
 	return strain, nil
+}
+
+// StrainStoreYMLFile is the yaml file storage implementation of the StrainStore
+// interface.
+type StrainStoreYMLFile struct {
+	mu      sync.Mutex
+	strains map[string]*can.Strain
+}
+
+// AddStrain adds a strain to the store, using its product name as the key.
+func (ssyf *StrainStoreYMLFile) AddStrain(s *can.Strain) error {
+	ssyf.mu.Lock()
+	defer ssyf.mu.Unlock()
+
+	if _, exists := ssyf.strains[s.Strain]; exists {
+		return ErrStrainAlreadyExists
+	}
+	ssyf.strains[s.Strain] = s
+
+	data, err := yaml.Marshal(ssyf.strains)
+	if err != nil {
+		return err
+	}
+	return WriteFile(strainsFile, data)
+}
+
+// GetStrains returns all strains in the store as a slice.
+func (ssyf *StrainStoreYMLFile) GetStrains() []*can.Strain {
+	ssyf.mu.Lock()
+	defer ssyf.mu.Unlock()
+
+	var strains []*can.Strain
+	for _, s := range ssyf.strains {
+		strains = append(strains, s)
+	}
+	return strains
+}
+
+// FindStrainByProduct finds a strain in the store by product name.
+func (ssyf *StrainStoreYMLFile) FindStrainByProduct(p string) (*can.Strain, error) {
+	ssyf.mu.Lock()
+	defer ssyf.mu.Unlock()
+
+	strain, exists := ssyf.strains[p]
+	if !exists {
+		return nil, ErrStrainNotFound
+	}
+	return strain, nil
+}
+
+// NewStrainStore returns a new StrainStore implementation depending on the
+// configured storage mode in the environment variable.
+func NewStrainStore() StrainStore {
+	storageMode := os.Getenv("STORAGE_MODE")
+	switch storageMode {
+	case StoreInMemory:
+		return &StrainStoreInMemory{}
+	case StoreYMLFile:
+		return &StrainStoreYMLFile{}
+	}
+	return nil
 }
