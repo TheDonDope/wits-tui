@@ -21,16 +21,16 @@ var statisticsActions = map[statisticsAction]string{
 
 // StatisticsAppliance is the tea.Model for the Statistics appliance.
 type StatisticsAppliance struct {
-	hv *HomeView
+	hm *HomeModel
 }
 
 // NewStatisticsAppliance returns a new StatisticsAppliance, with the following contents:
 //   - rendered title
 func NewStatisticsAppliance() *StatisticsAppliance {
 	s := &StatisticsAppliance{
-		hv: NewHomeView(),
+		hm: initialHomeModel(),
 	}
-	s.hv.Title(breadcrumbTitle(s.hv.title, statisticsTitle))
+	s.hm.Title(breadcrumbTitle(s.hm.title, statisticsTitle))
 	return s
 }
 
@@ -56,13 +56,13 @@ func (s *StatisticsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	var cmd tea.Cmd
-	hv, cmd := s.hv.Update(msg)
-	s.hv = hv.(*HomeView)
+	hv, cmd := s.hm.Update(msg)
+	s.hm = hv.(*HomeModel)
 	return s, cmd
 }
 
 // View renders the StatisticsAppliance UI, which is just a string. The view is
 // rendered after every Update.
 func (s *StatisticsAppliance) View() string {
-	return s.hv.View()
+	return s.hm.View()
 }

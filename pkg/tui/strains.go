@@ -43,7 +43,7 @@ type strainsListedMsg struct {
 
 // StrainsAppliance (a.k.a. StrainsHomeModel) is the tea.Model for the Strains appliance
 type StrainsAppliance struct {
-	hv      *HomeView
+	hm      *HomeModel
 	store   storage.StrainStore
 	service service.StrainService
 }
@@ -58,11 +58,11 @@ func NewStrainsAppliance() *StrainsAppliance {
 	}
 	svc := service.NewStrainService(fileStore)
 	s := &StrainsAppliance{
-		hv:      NewHomeView(),
+		hm:      initialHomeModel(),
 		store:   fileStore,
 		service: svc,
 	}
-	s.hv.Title(breadcrumbTitle(s.hv.title, strainsTitle))
+	s.hm.Title(breadcrumbTitle(s.hm.title, strainsTitle))
 	//s.hv.List(NewStrainsListModel())
 	return s
 }
@@ -91,19 +91,19 @@ func (s *StrainsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// TODO: redirect to home view?
 		return s, nil
 	case strainsListedMsg:
-		s.hv.listView.Update(msg)
+		s.hm.listView.Update(msg)
 	}
 
 	var cmd tea.Cmd
-	hv, cmd := s.hv.Update(msg)
-	s.hv = hv.(*HomeView)
+	hm, cmd := s.hm.Update(msg)
+	s.hm = hm.(*HomeModel)
 	return s, cmd
 }
 
 // View renders the StrainsAppliance UI, which is just a string. The view is
 // rendered after every Update.
 func (s *StrainsAppliance) View() string {
-	return s.hv.View()
+	return s.hm.View()
 }
 
 // onStrainsListed returns all strains from the service as a tea.Cmd to be handled in Update()

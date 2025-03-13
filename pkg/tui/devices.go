@@ -23,16 +23,16 @@ var devicesActions = map[devicesAction]string{
 
 // DevicesAppliance is the tea.Model for the Devices appliance.
 type DevicesAppliance struct {
-	hv *HomeView
+	hm *HomeModel
 }
 
 // NewDevicesAppliance returns a new DevicesAppliance, with the following contents:
 //   - rendered title
 func NewDevicesAppliance() *DevicesAppliance {
 	d := &DevicesAppliance{
-		hv: NewHomeView(),
+		hm: initialHomeModel(),
 	}
-	d.hv.Title(breadcrumbTitle(d.hv.title, devicesTitle))
+	d.hm.Title(breadcrumbTitle(d.hm.title, devicesTitle))
 	return d
 }
 
@@ -59,13 +59,13 @@ func (d *DevicesAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	var cmd tea.Cmd
 	// FIXME: these 2 lines seems wonky
-	hv, cmd := d.hv.Update(msg)
-	d.hv = hv.(*HomeView)
+	hv, cmd := d.hm.Update(msg)
+	d.hm = hv.(*HomeModel)
 	return d, cmd
 }
 
 // View renders the DevicesAppliance UI, which is just a string. The view is
 // rendered after every Update.
 func (d *DevicesAppliance) View() string {
-	return d.hv.View()
+	return d.hm.View()
 }

@@ -56,9 +56,9 @@ func NewStyles(lg *lipgloss.Renderer) *Styles {
 	return &s
 }
 
-// HomeViewBuilder builds home views from a set of given mandatory and optional components:
+// HomeModelBuilder builds home models from a set of given mandatory and optional components:
 // title, list (table), list buttons, preview.
-type HomeViewBuilder interface {
+type HomeModelBuilder interface {
 	// Title sets the title to render
 	Title(t string)
 	// List sets the list to render
@@ -71,9 +71,9 @@ type HomeViewBuilder interface {
 	Preview(p tea.Model)
 }
 
-// HomeView implements both tui.HomeViewBuilder and tea.Model interfaces to
-// act as a base for the applications appliances.
-type HomeView struct {
+// HomeModel implements both tui.HomeModelBuilder and tea.Model interfaces to
+// act as a base for the different appliances.
+type HomeModel struct {
 	lg     *lipgloss.Renderer
 	styles *Styles
 	width  int
@@ -86,82 +86,82 @@ type HomeView struct {
 	preview    tea.Model
 }
 
-// NewHomeView returns a new HomeView with empty content.
-func NewHomeView() *HomeView {
-	m := &HomeView{width: maxWidth, title: homeTitle}
+// initialHomeModel returns a new HomeModel with empty content.
+func initialHomeModel() *HomeModel {
+	m := &HomeModel{width: maxWidth, title: homeTitle}
 	m.lg = lipgloss.DefaultRenderer()
 	m.styles = NewStyles(m.lg)
 	return m
 }
 
-// HomeView implementation of tui.HomeViewBuilder interface --------------------
+// HomeModel implementation of tui.HomeModelBuilder interface --------------------
 
 // Title sets the title to render
-func (hv *HomeView) Title(t string) {
-	hv.title = t
+func (hm *HomeModel) Title(t string) {
+	hm.title = t
 }
 
 // List sets the list to render
-func (hv *HomeView) List(l tea.Model) {
-	hv.listView = l
+func (hm *HomeModel) List(l tea.Model) {
+	hm.listView = l
 }
 
 // Bar sets the list bar to render
-func (hv *HomeView) Bar(b tea.Model) {
-	hv.listBar = b
+func (hm *HomeModel) Bar(b tea.Model) {
+	hm.listBar = b
 }
 
 // Extras sets the extras to render
-func (hv *HomeView) Extras(e tea.Model) {
-	hv.listExtras = e
+func (hm *HomeModel) Extras(e tea.Model) {
+	hm.listExtras = e
 }
 
 // Preview sets the preview to render
-func (hv *HomeView) Preview(p tea.Model) {
-	hv.preview = p
+func (hm *HomeModel) Preview(p tea.Model) {
+	hm.preview = p
 }
 
-// HomeView implementation of tea.Model interface ------------------------------
+// HomeModel implementation of tea.Model interface ------------------------------
 
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
-func (hv *HomeView) Init() tea.Cmd {
+func (hm *HomeModel) Init() tea.Cmd {
 	return nil
 }
 
 // Update is called when a message is received. Use it to inspect messages
 // and, in response, update the model and/or send a command.
-func (hv *HomeView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (hm *HomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "esc", "q", "ctrl+c":
-			return hv, tea.Quit
+			return hm, tea.Quit
 		}
 	}
 	var cmds []tea.Cmd
 
-	return hv, tea.Batch(cmds...)
+	return hm, tea.Batch(cmds...)
 }
 
-// View renders the HomeView, which is just a string. The view is
+// View renders the HomeModel, which is just a string. The view is
 // rendered after every Update.
-func (hv *HomeView) View() string {
-	s := hv.styles
+func (hm *HomeModel) View() string {
+	s := hm.styles
 
-	header := hv.appBoundaryView(hv.title)
+	header := hm.appBoundaryView(hm.title)
 
-	body := lipgloss.JoinVertical(lipgloss.Left, hv.decoratedList(), hv.decoratedListBarAndExtras(), hv.decoratedPreview())
+	body := lipgloss.JoinVertical(lipgloss.Left, hm.decoratedList(), hm.decoratedListBarAndExtras(), hm.decoratedPreview())
 
 	return s.Base.Render(header + "\n" + body)
 }
 
 // appBoundaryView returns boundary view for the application with the given text.
-func (hv *HomeView) appBoundaryView(text string) string {
+func (hm *HomeModel) appBoundaryView(text string) string {
 	return lipgloss.PlaceHorizontal(
-		hv.width,
+		hm.width,
 		lipgloss.Left,
-		hv.styles.HeaderText.Render(text),
+		hm.styles.HeaderText.Render(text),
 		lipgloss.WithWhitespaceChars("/"),
 		lipgloss.WithWhitespaceForeground(indigo),
 	)
@@ -169,33 +169,33 @@ func (hv *HomeView) appBoundaryView(text string) string {
 
 // decoratedList returns the rendered list view, if existing, or otherwise empty
 // content.
-func (hv *HomeView) decoratedList() string {
-	if hv.listView == nil {
+func (hm *HomeModel) decoratedList() string {
+	if hm.listView == nil {
 		return "\n\n"
 	}
-	return hv.listView.View() + "\n\n"
+	return hm.listView.View() + "\n\n"
 }
 
 // decoratedListBarAndExtras returns the rendered list bar and extras, depending
 // on their existence.
-func (hv *HomeView) decoratedListBarAndExtras() string {
+func (hm *HomeModel) decoratedListBarAndExtras() string {
 	var b strings.Builder
-	if hv.listBar != nil {
-		b.WriteString(hv.listBar.View())
+	if hm.listBar != nil {
+		b.WriteString(hm.listBar.View())
 	}
-	if hv.listExtras != nil {
-		b.WriteString(hv.listExtras.View())
+	if hm.listExtras != nil {
+		b.WriteString(hm.listExtras.View())
 	}
 	return lipgloss.JoinHorizontal(lipgloss.Top, b.String()) + "\n\n"
 }
 
 // decoratedPreview returns the rendered preview, if existing, or otherwise
 // empty content
-func (hv *HomeView) decoratedPreview() string {
-	if hv.preview == nil {
+func (hm *HomeModel) decoratedPreview() string {
+	if hm.preview == nil {
 		return ""
 	}
-	return hv.preview.View() + "\n\n"
+	return hm.preview.View() + "\n\n"
 }
 
 // markedText returns an string with its marked character (denoted by an `&`)

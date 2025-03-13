@@ -23,16 +23,16 @@ var settingsActions = map[settingsAction]string{
 
 // SettingsAppliance is the tea.Model for the Settings appliance.
 type SettingsAppliance struct {
-	hv *HomeView
+	hm *HomeModel
 }
 
 // NewSettingsAppliance returns a new SettingsAppliance, with the following contents:
 //   - rendered title
 func NewSettingsAppliance() *SettingsAppliance {
 	s := &SettingsAppliance{
-		hv: NewHomeView(),
+		hm: initialHomeModel(),
 	}
-	s.hv.Title(breadcrumbTitle(s.hv.title, settingsTitle))
+	s.hm.Title(breadcrumbTitle(s.hm.title, settingsTitle))
 	return s
 }
 
@@ -58,13 +58,13 @@ func (s *SettingsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	var cmd tea.Cmd
-	hv, cmd := s.hv.Update(msg)
-	s.hv = hv.(*HomeView)
+	hv, cmd := s.hm.Update(msg)
+	s.hm = hv.(*HomeModel)
 	return s, cmd
 }
 
 // View renders the StatisticsAppliance UI, which is just a string. The view is
 // rendered after every Update.
 func (s *SettingsAppliance) View() string {
-	return s.hv.View()
+	return s.hm.View()
 }
