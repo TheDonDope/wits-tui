@@ -2,6 +2,10 @@
 
 Wits aims to help cannabis patients and users to manage and monitor their cannabis consumption and inventory.
 
+## Changelog & Roadmap
+
+A detailed changelog can be found in the [CHANGELOG.md](./CHANGELOG.md) and the current development progress is tracked in the [ROADMAP.md](./ROADMAP.md). We do not use GitHub Issues but instead track our features, bugfixes and refactorings there.
+
 ## Building the Application
 
 Building the binary requires only a single step:
