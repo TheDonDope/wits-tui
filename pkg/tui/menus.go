@@ -19,8 +19,8 @@ type MenuModel struct {
 	items  []string
 }
 
-// NewMenuModel returns the initial model for the main menu.
-func NewMenuModel() MenuModel {
+// InitialMenuModel returns the initial model for the main menu.
+func InitialMenuModel() MenuModel {
 	return MenuModel{
 		items: appliances,
 	}
@@ -54,17 +54,17 @@ func (m MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.cursor = 0 // Wrap to first item
 			}
 		case "alt+s":
-			m.cursor = 0
+			return initialStrainsHomeModel(), nil
 		case "alt+d":
-			m.cursor = 1
+			return initialDevicesHomeModel(), nil
 		case "alt+e":
-			m.cursor = 2
+			return initialSettingsModel(), nil
 		case "alt+t":
-			m.cursor = 3
+			return initialStatisticsHomeModel(), nil
 		case "enter":
 			return onMenuSelected(m)
 		case "esc":
-			return NewMenuModel(), nil
+			return InitialMenuModel(), nil
 		}
 	}
 	return m, nil
@@ -89,13 +89,13 @@ func (m MenuModel) View() string {
 func onMenuSelected(m MenuModel) (tea.Model, tea.Cmd) {
 	switch m.cursor {
 	case 0:
-		return NewStrainsAppliance(), nil
+		return initialStrainsHomeModel(), nil
 	case 1:
-		return NewDevicesAppliance(), nil
+		return initialDevicesHomeModel(), nil
 	case 2:
-		return NewSettingsAppliance(), nil
+		return initialSettingsModel(), nil
 	case 3:
-		return NewStatisticsAppliance(), nil
+		return initialStatisticsHomeModel(), nil
 	}
 	return m, nil
 }

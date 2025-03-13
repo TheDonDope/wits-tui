@@ -41,77 +41,77 @@ type strainsListedMsg struct {
 	items []list.Item
 }
 
-// StrainsAppliance (a.k.a. StrainsHomeModel) is the tea.Model for the Strains appliance
-type StrainsAppliance struct {
+// StrainsHomeModel is the tea.Model for the Strains appliance
+type StrainsHomeModel struct {
 	hm      *HomeModel
 	store   storage.StrainStore
 	service service.StrainService
 }
 
-// NewStrainsAppliance returns a new StrainsAppliance, with the following contents:
+// initialStrainsHomeModel returns a new StrainsHomeModel, with the following contents:
 //   - rendered title
-func NewStrainsAppliance() *StrainsAppliance {
+func initialStrainsHomeModel() *StrainsHomeModel {
 	// TODO: consider using a tea.Cmd side effect
 	fileStore, err := storage.NewStrainStoreYMLFile()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error loading data from YML File: %v", err)
 	}
 	svc := service.NewStrainService(fileStore)
-	s := &StrainsAppliance{
+	s := &StrainsHomeModel{
 		hm:      initialHomeModel(),
 		store:   fileStore,
 		service: svc,
 	}
 	s.hm.Title(breadcrumbTitle(s.hm.title, strainsTitle))
-	//s.hv.List(NewStrainsListModel())
+	s.hm.List(initialStrainListModel())
 	return s
 }
 
-// StrainsAppliance implementation of tea.Model interface ----------------------
+// StrainsHomeModel implementation of tea.Model interface ----------------------
 
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
-func (s *StrainsAppliance) Init() tea.Cmd {
-	return s.onStrainsListed()
+func (shm *StrainsHomeModel) Init() tea.Cmd {
+	return shm.onStrainsListed()
 }
 
 // Update is called when a message is received. Use it to inspect messages
 // and, in response, update the model and/or send a command.
-func (s *StrainsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (shm *StrainsHomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q", "ctrl+c":
-			return s, tea.Quit
+			return shm, tea.Quit
 		case "esc":
-			return NewMenuModel(), nil
+			return InitialMenuModel(), nil
 		}
 	case strainSubmittedMsg:
-		s.service.AddStrain(msg.strain)
+		shm.service.AddStrain(msg.strain)
 		// TODO: redirect to home view?
-		return s, nil
+		return shm, nil
 	case strainsListedMsg:
-		s.hm.listView.Update(msg)
+		shm.hm.listView.Update(msg)
 	}
 
 	var cmd tea.Cmd
-	hm, cmd := s.hm.Update(msg)
-	s.hm = hm.(*HomeModel)
-	return s, cmd
+	hm, cmd := shm.hm.Update(msg)
+	shm.hm = hm.(*HomeModel)
+	return shm, cmd
 }
 
-// View renders the StrainsAppliance UI, which is just a string. The view is
+// View renders the StrainsHomeModel UI, which is just a string. The view is
 // rendered after every Update.
-func (s *StrainsAppliance) View() string {
-	return s.hm.View()
+func (shm *StrainsHomeModel) View() string {
+	return shm.hm.View()
 }
 
 // onStrainsListed returns all strains from the service as a tea.Cmd to be handled in Update()
-func (s *StrainsAppliance) onStrainsListed() tea.Cmd {
+func (shm *StrainsHomeModel) onStrainsListed() tea.Cmd {
 	return func() tea.Msg {
 		items := []list.Item{}
-		for _, strain := range s.service.GetStrains() {
-			items = append(items, StrainsListItem{value: strain})
+		for _, strain := range shm.service.GetStrains() {
+			items = append(items, StrainListItem{value: strain})
 		}
 		return strainsListedMsg{items}
 	}
@@ -121,12 +121,12 @@ func (s *StrainsAppliance) onStrainsListed() tea.Cmd {
 // TODO: hook up to addStrain strainsAction
 func onStrainAdded() tea.Cmd {
 	return func() tea.Msg {
-		form := newStrainForm()
+		form := initialStrainForm()
 
 		if err := form.Run(); err != nil {
 			fmt.Fprintf(os.Stderr, "Error running strain creation form: %v\n", err)
 		}
-		strain := newStrainFromForm(form)
+		strain := parseStrain(form)
 		return strainSubmittedMsg{strain}
 	}
 }
@@ -167,8 +167,8 @@ func terpeneOptions() []huh.Option[*can.Terpene] {
 	return terpenes
 }
 
-// newStrainForm returns a form for creating a new strain.
-func newStrainForm() *huh.Form {
+// initialStrainForm returns a form for creating a new strain.
+func initialStrainForm() *huh.Form {
 	return huh.NewForm(
 		huh.NewGroup(
 			huh.NewInput().
@@ -227,8 +227,8 @@ func newStrainForm() *huh.Form {
 	)
 }
 
-// newStrainFromForm creates a new strain entity from the given form data.
-func newStrainFromForm(form *huh.Form) *can.Strain {
+// parseStrain creates a new strain entity from the given form data.
+func parseStrain(form *huh.Form) *can.Strain {
 	thc, err := strconv.ParseFloat(form.GetString("thc"), 64)
 	if err != nil {
 		thc = 0
@@ -258,52 +258,53 @@ func newStrainFromForm(form *huh.Form) *can.Strain {
 	}
 }
 
-// StrainsListItem is a list item for strains.
-type StrainsListItem struct {
+// StrainListItem is a list item for strains.
+type StrainListItem struct {
 	value *can.Strain
 }
 
-// StrainsListItem implementation of list.Item interface -----------------------
+// StrainListItem implementation of list.Item interface ------------------------
 
 // FilterValue is the value we use when filtering against this item when
 // we're filtering the list.
-func (sli StrainsListItem) FilterValue() string {
+func (sli StrainListItem) FilterValue() string {
 	return sli.value.Cultivar
 }
 
 // Title returns the title for the list item.
-func (sli StrainsListItem) Title() string {
+func (sli StrainListItem) Title() string {
 	return sli.value.Strain
 }
 
 // Description returns the description for the list item.
-func (sli StrainsListItem) Description() string {
+func (sli StrainListItem) Description() string {
 	return fmt.Sprintf("Genetic: %s, THC/CBD: %.1f%% %.1f%%", can.Genetics[sli.value.Genetic], sli.value.THC, sli.value.CBD)
 }
 
-// StrainsListModel is a tea.Model for the strains list.
-type StrainsListModel struct {
+// StrainListModel is a tea.Model for the strains list.
+type StrainListModel struct {
 	list list.Model
 }
 
-// NewStrainsListModel creates a new model for the strains list.
-func NewStrainsListModel() *StrainsListModel {
+// initialStrainListModel creates a new model for the strains list, without any
+// items.
+func initialStrainListModel() *StrainListModel {
 	l := list.New([]list.Item{}, list.NewDefaultDelegate(), 60, 30)
 	l.Title = "Entries"
-	return &StrainsListModel{list: l}
+	return &StrainListModel{list: l}
 }
 
-// StrainsListModel implementation of tea.Model interface ----------------------
+// StrainListModel implementation of tea.Model interface -----------------------
 
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
-func (slm StrainsListModel) Init() tea.Cmd {
+func (slm StrainListModel) Init() tea.Cmd {
 	return nil
 }
 
 // Update is called when a message is received. Use it to inspect messages
 // and, in response, update the model and/or send a command.
-func (slm StrainsListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (slm StrainListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -321,6 +322,6 @@ func (slm StrainsListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 // View renders the StrainListModel UI, which is just a string. The view is
 // rendered after every Update.
-func (slm StrainsListModel) View() string {
+func (slm StrainListModel) View() string {
 	return slm.list.View()
 }

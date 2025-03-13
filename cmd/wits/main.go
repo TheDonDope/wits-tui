@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	_, err := tea.NewProgram(tui.NewMenuModel(), tea.WithAltScreen()).Run()
+	_, err := tea.NewProgram(tui.InitialMenuModel(), tea.WithAltScreen()).Run()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error starting program: %v", err)
 		os.Exit(1)

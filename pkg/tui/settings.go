@@ -21,50 +21,50 @@ var settingsActions = map[settingsAction]string{
 	localization:     markedText("🌍 &Localization"),
 	backupAndRestore: markedText("💾 &Backup & Restore")}
 
-// SettingsAppliance is the tea.Model for the Settings appliance.
-type SettingsAppliance struct {
+// SettingsHomeModel is the tea.Model for the Settings appliance.
+type SettingsHomeModel struct {
 	hm *HomeModel
 }
 
-// NewSettingsAppliance returns a new SettingsAppliance, with the following contents:
+// initialSettingsModel returns a new SettingsHomeModel, with the following contents:
 //   - rendered title
-func NewSettingsAppliance() *SettingsAppliance {
-	s := &SettingsAppliance{
+func initialSettingsModel() *SettingsHomeModel {
+	s := &SettingsHomeModel{
 		hm: initialHomeModel(),
 	}
 	s.hm.Title(breadcrumbTitle(s.hm.title, settingsTitle))
 	return s
 }
 
-// SettingsAppliance implementation of tea.Model interface ---------------------
+// SettingsHomeModel implementation of tea.Model interface ---------------------
 
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
-func (s *SettingsAppliance) Init() tea.Cmd {
+func (shm *SettingsHomeModel) Init() tea.Cmd {
 	return nil
 }
 
 // Update is called when a message is received. Use it to inspect messages
 // and, in response, update the model and/or send a command.
-func (s *SettingsAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (shm *SettingsHomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q", "ctrl+c":
-			return s, tea.Quit
+			return shm, tea.Quit
 		case "esc":
-			return NewMenuModel(), nil
+			return InitialMenuModel(), nil
 		}
 	}
 
 	var cmd tea.Cmd
-	hv, cmd := s.hm.Update(msg)
-	s.hm = hv.(*HomeModel)
-	return s, cmd
+	hv, cmd := shm.hm.Update(msg)
+	shm.hm = hv.(*HomeModel)
+	return shm, cmd
 }
 
-// View renders the StatisticsAppliance UI, which is just a string. The view is
+// View renders the SettingsHomeModel UI, which is just a string. The view is
 // rendered after every Update.
-func (s *SettingsAppliance) View() string {
-	return s.hm.View()
+func (shm *SettingsHomeModel) View() string {
+	return shm.hm.View()
 }

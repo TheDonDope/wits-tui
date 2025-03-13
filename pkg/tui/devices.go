@@ -21,51 +21,50 @@ var devicesActions = map[devicesAction]string{
 	editDevice:   markedText("✏️ &Edit Device"),
 	deleteDevice: markedText("❌ &Delete Device")}
 
-// DevicesAppliance is the tea.Model for the Devices appliance.
-type DevicesAppliance struct {
+// DevicesHomeModel is the tea.Model for the Devices appliance.
+type DevicesHomeModel struct {
 	hm *HomeModel
 }
 
-// NewDevicesAppliance returns a new DevicesAppliance, with the following contents:
+// initialDevicesHomeModel returns a new DevicesHomeModel, with the following contents:
 //   - rendered title
-func NewDevicesAppliance() *DevicesAppliance {
-	d := &DevicesAppliance{
+func initialDevicesHomeModel() *DevicesHomeModel {
+	d := &DevicesHomeModel{
 		hm: initialHomeModel(),
 	}
 	d.hm.Title(breadcrumbTitle(d.hm.title, devicesTitle))
 	return d
 }
 
-// StatisticsAppliance implementation of tea.Model interface -------------------
+// DevicesHomeModel implementation of tea.Model interface -------------------
 
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
-func (d *DevicesAppliance) Init() tea.Cmd {
+func (dhm *DevicesHomeModel) Init() tea.Cmd {
 	return nil
 }
 
 // Update is called when a message is received. Use it to inspect messages
 // and, in response, update the model and/or send a command.
-func (d *DevicesAppliance) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (dhm *DevicesHomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q", "ctrl+c":
-			return d, tea.Quit
+			return dhm, tea.Quit
 		case "esc":
-			return NewMenuModel(), nil
+			return InitialMenuModel(), nil
 		}
 	}
 
 	var cmd tea.Cmd
-	// FIXME: these 2 lines seems wonky
-	hv, cmd := d.hm.Update(msg)
-	d.hm = hv.(*HomeModel)
-	return d, cmd
+	hm, cmd := dhm.hm.Update(msg)
+	dhm.hm = hm.(*HomeModel)
+	return dhm, cmd
 }
 
-// View renders the DevicesAppliance UI, which is just a string. The view is
+// View renders the DevicesHomeModel UI, which is just a string. The view is
 // rendered after every Update.
-func (d *DevicesAppliance) View() string {
-	return d.hm.View()
+func (dhm *DevicesHomeModel) View() string {
+	return dhm.hm.View()
 }
