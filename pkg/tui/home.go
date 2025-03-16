@@ -135,13 +135,13 @@ func (hm *HomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "esc", "q", "ctrl+c":
+		case "q", "ctrl+c":
 			return hm, tea.Quit
 		}
+	case strainsListedMsg:
+		return hm.listView.Update(msg)
 	}
-	var cmds []tea.Cmd
-
-	return hm, tea.Batch(cmds...)
+	return hm, nil
 }
 
 // View renders the HomeModel, which is just a string. The view is

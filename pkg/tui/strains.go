@@ -93,7 +93,7 @@ func (shm *StrainsHomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// TODO: redirect to home view?
 		return shm, shm.onStrainsListed()
 	case strainsListedMsg:
-		shm.hm.listView.Update(msg)
+		return shm.hm.Update(msg)
 	}
 
 	var cmd tea.Cmd
@@ -340,9 +340,12 @@ func (slm *StrainListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "q":
-			return slm, tea.Quit
+		case "esc":
+			return InitialMenuModel(), nil
+		case "alt+n", "ctrl+n":
+			return slm, onStrainAdded()
 		}
+
 	case strainsListedMsg:
 		return slm, slm.list.SetItems(msg.items)
 	}
