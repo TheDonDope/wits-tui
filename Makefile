@@ -13,9 +13,10 @@ build-windows:
 
 clean:
 	rm -f ./bin/wits
+	rm -f ./bin/wits.exe
+	rm -rf ./.wits/log
 	rm -f coverage.html
 	rm -f coverage.out
-	rm -rf log
 	rm -rf tmp
 	rm -rf vendor
 

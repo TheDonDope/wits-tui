@@ -77,6 +77,19 @@ func (ssim *StrainStoreInMemory) FindStrainByProduct(p string) (*can.Strain, err
 	return strain, nil
 }
 
+// String returns a formatted string representation of StrainStoreInMemory.
+func (ssim *StrainStoreInMemory) String() string {
+	ssim.mu.Lock()
+	defer ssim.mu.Unlock()
+
+	var strains []string
+	for _, strain := range ssim.strains {
+		strains = append(strains, strain.String())
+	}
+
+	return fmt.Sprintf("StrainStoreInMemory: len(strains): %v", len(strains))
+}
+
 // StrainStoreYMLFile is the yaml file storage implementation of the StrainStore
 // interface.
 type StrainStoreYMLFile struct {
@@ -132,6 +145,19 @@ func (ssyf *StrainStoreYMLFile) FindStrainByProduct(p string) (*can.Strain, erro
 	}
 	log.Printf("✅ 💾  (pkg/storage/strain_store.go) FindStrainByProduct() -> strain: %v \n", strain)
 	return strain, nil
+}
+
+// String returns a formatted string representation of StrainStoreYMLFile.
+func (ssyf *StrainStoreYMLFile) String() string {
+	ssyf.mu.Lock()
+	defer ssyf.mu.Unlock()
+
+	var strains []string
+	for _, strain := range ssyf.strains {
+		strains = append(strains, strain.String())
+	}
+
+	return fmt.Sprintf("StrainStoreYMLFile: len(strains): %v", len(strains))
 }
 
 // NewStrainStore returns a new StrainStore implementation depending on the
