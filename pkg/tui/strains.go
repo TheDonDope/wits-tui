@@ -364,7 +364,7 @@ func (slm *StrainListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return slm, tea.Quit
 		}
 	case strainsListedMsg:
-		slm.list.SetItems(msg.items)
+		return slm, slm.list.SetItems(msg.items)
 	}
 
 	var cmd tea.Cmd
