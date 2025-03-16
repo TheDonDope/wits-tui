@@ -2,6 +2,7 @@ package tui
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"sort"
 	"strconv"
@@ -39,12 +40,6 @@ var (
 	sortedTerpenes  = sortedTerpenesList()
 )
 
-type strainsStoreInitializedMsg struct {
-	str storage.StrainStore
-	svc service.StrainService
-	err error
-}
-
 type strainsListedMsg struct {
 	items []list.Item
 }
@@ -56,29 +51,20 @@ type strainSubmittedMsg struct {
 // StrainsHomeModel is the tea.Model for the Strains appliance
 type StrainsHomeModel struct {
 	hm      *HomeModel
-	store   storage.StrainStore
 	service service.StrainService
 }
 
 // initialStrainsHomeModel returns a new StrainsHomeModel, with the following contents:
 //   - rendered title
 func initialStrainsHomeModel() *StrainsHomeModel {
+	log.Println("💬 💾  (pkg/tui/strains.go) initialStrainsHomeModel()")
 	s := &StrainsHomeModel{
-		hm: initialHomeModel(),
+		hm:      initialHomeModel(),
+		service: service.NewStrainService(storage.NewStrainStore()),
 	}
 	s.hm.Title(breadcrumbTitle(s.hm.title, strainsTitle))
 	s.hm.List(initialStrainListModel())
 	return s
-}
-
-// onStoreInitializing configures and creates the store and service that the
-// model uses and upon completion sends a message, including an error if occured.
-func (shm *StrainsHomeModel) onStoreInitializing() tea.Cmd {
-	return func() tea.Msg {
-		store := storage.NewStrainStore()
-		svc := service.NewStrainService(store)
-		return strainsStoreInitializedMsg{store, svc, nil}
-	}
 }
 
 // StrainsHomeModel implementation of tea.Model interface ----------------------
@@ -86,7 +72,7 @@ func (shm *StrainsHomeModel) onStoreInitializing() tea.Cmd {
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
 func (shm *StrainsHomeModel) Init() tea.Cmd {
-	return shm.onStoreInitializing()
+	return nil
 }
 
 // Update is called when a message is received. Use it to inspect messages
@@ -102,14 +88,6 @@ func (shm *StrainsHomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "alt+n", "ctrl+n":
 			return shm, onStrainAdded()
 		}
-	case strainsStoreInitializedMsg:
-		if msg.err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to initialize strain store: %v\n", msg.err)
-			return shm, nil
-		}
-		shm.store = msg.str
-		shm.service = msg.svc
-		return shm, shm.onStrainsListed()
 	case strainSubmittedMsg:
 		shm.service.AddStrain(msg.strain)
 		// TODO: redirect to home view?
@@ -341,8 +319,10 @@ type StrainListModel struct {
 // initialStrainListModel creates a new model for the strains list, without any
 // items.
 func initialStrainListModel() *StrainListModel {
+	log.Println("💬 💾  (pkg/tui/strains.go) initialStrainListModel()")
 	l := list.New([]list.Item{}, list.NewDefaultDelegate(), 60, 30)
 	l.Title = "Entries"
+	log.Printf("✅ 💾  (pkg/tui/strains.go) initialStrainListModel() -> len(l.Items()): %v \n", len(l.Items()))
 	return &StrainListModel{list: l}
 }
 

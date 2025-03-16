@@ -11,7 +11,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var strainsFile = fmt.Sprintf("%s/strains.yml", os.Getenv("WITS_DIR"))
+const strainsFile = "strains.yml"
 
 var (
 	// ErrStrainNotFound is returned when a strain is not found in the store.
@@ -102,7 +102,7 @@ func (ssyf *StrainStoreYMLFile) AddStrain(s *can.Strain) error {
 		return err
 	}
 	log.Println("✅ 💾  (pkg/storage/strain_store.go) AddStrain()")
-	return os.WriteFile(strainsFile, data, 0644)
+	return os.WriteFile(fmt.Sprintf("%s/%s", os.Getenv("WITS_DIR"), strainsFile), data, 0644)
 }
 
 // GetStrains returns all strains in the store as a slice.
@@ -141,13 +141,17 @@ func NewStrainStore() StrainStore {
 	log.Printf("💬 💾  (pkg/storage/strain_store.go) NewStrainStore() -> storageMode: %v \n", storageMode)
 	switch storageMode {
 	case StoreInMemory:
-		return &StrainStoreInMemory{}
+		return &StrainStoreInMemory{
+			strains: make(map[string]*can.Strain),
+		}
 	case StoreYMLFile:
-		ssyf := &StrainStoreYMLFile{}
-		data, err := os.ReadFile(strainsFile)
+		ssyf := &StrainStoreYMLFile{
+			strains: make(map[string]*can.Strain),
+		}
+		data, err := os.ReadFile(fmt.Sprintf("%s/%s", os.Getenv("WITS_DIR"), strainsFile))
 		if err != nil {
 			if os.IsNotExist(err) {
-				log.Printf("🚨 💾  (pkg/storage/strain_store.go) ❓❓❓ ❓ 🗒️  Failed to strain file (non existing) with error: %v. Returning new empty store. \n", err)
+				log.Println("ℹ️ 💾  (pkg/storage/strain_store.go) 🗒️  Strain file not existing. Returning new empty store.")
 				return ssyf
 			}
 		}
