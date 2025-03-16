@@ -52,7 +52,8 @@ func (m MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.cursor = 0 // Wrap to first item
 			}
 		case "alt+s":
-			return initialStrainsHomeModel(), nil
+			shm := initialStrainsHomeModel()
+			return shm, shm.onStrainsListed()
 		case "alt+d":
 			return initialDevicesHomeModel(), nil
 		case "alt+e":
@@ -87,7 +88,8 @@ func (m MenuModel) View() string {
 func onMenuSelected(m MenuModel) (tea.Model, tea.Cmd) {
 	switch m.cursor {
 	case 0:
-		return initialStrainsHomeModel(), nil
+		shm := initialStrainsHomeModel()
+		return shm, shm.onStrainsListed()
 	case 1:
 		return initialDevicesHomeModel(), nil
 	case 2:
