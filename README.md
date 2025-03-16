@@ -26,11 +26,14 @@ Building the binary and running it requires only a simple invocation to `make`:
 
 ```shell
 $ make
-go build -v -ldflags "-X main.Version=v0.3.0 -X main.CommitSHA=7a57d31 -X main.CommitDate=2025-03-16T22:24:25" -o ./bin/wits ./cmd/wits/main.go
-command-line-arguments
-2025/03/16 22:25:59 🚀 🖥️  (cmd/wits/main.go) main()
-2025/03/16 22:25:59 ✅ 🖥️  (cmd/wits/main.go) loadEnvironment()
-2025/03/16 22:25:59 ✅ 🖥️  (cmd/wits/main.go) ensureWitsFolders()
+go build \
+  -v \
+  -ldflags "-X main.Version=v0.3.0 -X main.CommitSHA=23e8a8c -X main.CommitDate=2025-03-16T22:27:35" \
+  -o ./bin/wits \
+  ./cmd/wits/main.go
+2025/03/16 23:04:05 🚀 🖥️  (cmd/wits/main.go) main()
+2025/03/16 23:04:05 ✅ 🖥️  (cmd/wits/main.go) loadEnvironment()
+2025/03/16 23:04:05 ✅ 🖥️  (cmd/wits/main.go) ensureWitsFolders()
 
 🥦 Welcome to Wits!
 
@@ -42,6 +45,21 @@ command-line-arguments
 Press ctrl+c or q to quit.
 ```
 
+## Building the Binary for Windows
+
+For windows, the `wits.exe` can be built by invoking the `make build-windows` command:
+
+```shell
+$ make build-windows
+GOOS=windows \
+GOARCH=amd64 \
+go build \
+  -v \
+  -ldflags "-X main.Version=v0.3.0 -X main.CommitSHA=23e8a8c -X main.CommitDate=2025-03-16T22:27:35" \
+  -o ./bin/wits.exe \
+  ./cmd/wits/main.go
+```
+
 ## Running Tests
 
 - Run the testsuite with coverage enabled:
@@ -49,11 +67,13 @@ Press ctrl+c or q to quit.
 ```shell
 $ make test
 go test -race -v ./... -coverprofile coverage.out
-        github.com/TheDonDope/wits-tui/cmd/tui          coverage: 0.0% of statements
-?       github.com/TheDonDope/wits-tui/pkg/cannabis     [no test files]
+        github.com/TheDonDope/wits-tui/cmd/wits         coverage: 0.0% of statements
+        github.com/TheDonDope/wits-tui/cmd/wits/home            coverage: 0.0% of statements
+        github.com/TheDonDope/wits-tui/pkg/cannabis             coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/service              coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/storage              coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/tui          coverage: 0.0% of statements
+?       github.com/TheDonDope/wits-tui/pkg/version      [no test files]
 ```
 
 - Generate the coverage results as html:
@@ -61,11 +81,13 @@ go test -race -v ./... -coverprofile coverage.out
 ```shell
 $ make cover
 go test -race -v ./... -coverprofile coverage.out
-        github.com/TheDonDope/wits-tui/cmd/tui          coverage: 0.0% of statements
-?       github.com/TheDonDope/wits-tui/pkg/cannabis     [no test files]
+        github.com/TheDonDope/wits-tui/cmd/wits         coverage: 0.0% of statements
+        github.com/TheDonDope/wits-tui/cmd/wits/home            coverage: 0.0% of statements
+        github.com/TheDonDope/wits-tui/pkg/cannabis             coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/service              coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/storage              coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/tui          coverage: 0.0% of statements
+?       github.com/TheDonDope/wits-tui/pkg/version      [no test files]
 go tool cover -html coverage.out -o coverage.html
 ```
 
@@ -74,11 +96,13 @@ go tool cover -html coverage.out -o coverage.html
 ```shell
 $ make show-cover
 go test -race -v ./... -coverprofile coverage.out
-        github.com/TheDonDope/wits-tui/cmd/tui          coverage: 0.0% of statements
-?       github.com/TheDonDope/wits-tui/pkg/cannabis     [no test files]
+        github.com/TheDonDope/wits-tui/cmd/wits         coverage: 0.0% of statements
+        github.com/TheDonDope/wits-tui/cmd/wits/home            coverage: 0.0% of statements
+        github.com/TheDonDope/wits-tui/pkg/cannabis             coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/service              coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/storage              coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/tui          coverage: 0.0% of statements
+?       github.com/TheDonDope/wits-tui/pkg/version      [no test files]
 go tool cover -html coverage.out -o coverage.html
 open coverage.html
 <Opens Browser>

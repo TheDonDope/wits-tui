@@ -10,10 +10,20 @@ install:
 	go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
 
 build:
-	go build -v -ldflags "-X main.Version=$(VERSION) -X main.CommitSHA=$(COMMIT_SHA) -X main.CommitDate=$(COMMIT_DATE)" -o ./bin/wits ./cmd/wits/main.go
+	go build \
+	  -v \
+	  -ldflags "-X main.Version=$(VERSION) -X main.CommitSHA=$(COMMIT_SHA) -X main.CommitDate=$(COMMIT_DATE)" \
+	  -o ./bin/wits \
+	  ./cmd/wits/main.go
 
 build-windows:
-	GOOS=windows GOARCH=amd64 go build -v -ldflags "-X main.Version=$(VERSION) -X main.CommitSHA=$(COMMIT_SHA) -X main.CommitDate=$(COMMIT_DATE)" -o ./bin/wits.exe ./cmd/wits/main.go
+	GOOS=windows \
+	GOARCH=amd64 \
+	go build \
+	  -v \
+	  -ldflags "-X main.Version=$(VERSION) -X main.CommitSHA=$(COMMIT_SHA) -X main.CommitDate=$(COMMIT_DATE)" \
+	  -o ./bin/wits.exe \
+	  ./cmd/wits/main.go
 
 clean:
 	rm -f ./bin/wits
