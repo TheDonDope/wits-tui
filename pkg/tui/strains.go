@@ -308,7 +308,7 @@ func (sli StrainListItem) Title() string {
 
 // Description returns the description for the list item.
 func (sli StrainListItem) Description() string {
-	return fmt.Sprintf("Genetic: %s, THC/CBD: %.1f%% %.1f%%", can.Genetics[sli.value.Genetic], sli.value.THC, sli.value.CBD)
+	return fmt.Sprintf("Amount: %.1f g, THC/CBD: %.1f%% / %.1f%%, Genetic: %s", sli.value.Amount, sli.value.THC, sli.value.CBD, can.Genetics[sli.value.Genetic])
 }
 
 // StrainListModel is a tea.Model for the strains list.
