@@ -134,19 +134,19 @@ func (shm *StrainsHomeModel) onStrainsListed() tea.Cmd {
 // onStrainAdded runs the form to add a strain and on submission sends a message
 // with the parsed strain data from the form.
 func onStrainAdded() tea.Cmd {
-	return func() tea.Msg {
-		form := initialStrainForm()
+	form := initialStrainForm()
 
-		if err := form.Run(); err != nil {
-			fmt.Fprintf(os.Stderr, "Error running strain creation form: %v\n", err)
-			return nil // Return nil to prevent further processing
-		}
-		strain := parseStrain(form)
-		if strain == nil {
-			return nil // Do nothing if the user canceled or input was invalid
-		}
-		return strainSubmittedMsg{strain}
+	if err := form.Run(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error running strain creation form: %v\n", err)
+		return nil // Return nil to prevent further processing
 	}
+
+	strain := parseStrain(form)
+	if strain == nil {
+		return nil // Do nothing if the user canceled or input was invalid
+	}
+	return func() tea.Msg { return strainSubmittedMsg{strain} }
+
 }
 
 // sortedGeneticsList returns a list of genetic options for the user to choose from.
