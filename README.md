@@ -26,7 +26,11 @@ Building the binary and running it requires only a simple invocation to `make`:
 
 ```shell
 $ make
-go build -v -o ./bin/wits ./cmd/wits/main.go
+go build -v -ldflags "-X main.Version=v0.3.0 -X main.CommitSHA=7a57d31 -X main.CommitDate=2025-03-16T22:24:25" -o ./bin/wits ./cmd/wits/main.go
+command-line-arguments
+2025/03/16 22:25:59 🚀 🖥️  (cmd/wits/main.go) main()
+2025/03/16 22:25:59 ✅ 🖥️  (cmd/wits/main.go) loadEnvironment()
+2025/03/16 22:25:59 ✅ 🖥️  (cmd/wits/main.go) ensureWitsFolders()
 
 🥦 Welcome to Wits!
 

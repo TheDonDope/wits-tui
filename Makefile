@@ -1,3 +1,7 @@
+VERSION = $(shell git describe --tags --abbrev=0)
+COMMIT_SHA = $(shell git rev-parse --short HEAD)
+COMMIT_DATE = $(shell git --no-pager log -1 --pretty='format:%cd' --date='format:%Y-%m-%dT%H:%M:%S')
+
 run: build
 	@./bin/wits
 
@@ -6,10 +10,10 @@ install:
 	go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
 
 build:
-	go build -v -o ./bin/wits ./cmd/wits/main.go
+	go build -v -ldflags "-X main.Version=$(VERSION) -X main.CommitSHA=$(COMMIT_SHA) -X main.CommitDate=$(COMMIT_DATE)" -o ./bin/wits ./cmd/wits/main.go
 
 build-windows:
-	GOOS=windows GOARCH=amd64 go build -v -o ./bin/wits.exe ./cmd/wits/main.go
+	GOOS=windows GOARCH=amd64 go build -v -ldflags "-X main.Version=$(VERSION) -X main.CommitSHA=$(COMMIT_SHA) -X main.CommitDate=$(COMMIT_DATE)" -o ./bin/wits.exe ./cmd/wits/main.go
 
 clean:
 	rm -f ./bin/wits
