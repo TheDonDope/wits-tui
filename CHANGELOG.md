@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v0.4.1"></a>
+## [v0.4.1] - 2025-03-17
+### Fix
+- repair release target in makefile
+
+
 <a name="v0.4.0"></a>
 ## [v0.4.0] - 2025-03-17
 ### Chore
@@ -13,6 +19,7 @@
 - **deps:** bump github.com/charmbracelet/lipgloss from 1.0.0 to 1.1.0
 
 ### Docs
+- add changelog for v0.4.0
 - fix formatting
 - update roadmap
 - add codacy badge
@@ -104,7 +111,8 @@
 - initial commit
 
 
-[Unreleased]: https://github.com/TheDonDope/wits-tui/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/TheDonDope/wits-tui/compare/v0.4.1...HEAD
+[v0.4.1]: https://github.com/TheDonDope/wits-tui/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://github.com/TheDonDope/wits-tui/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/TheDonDope/wits-tui/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/TheDonDope/wits-tui/compare/v0.1.0...v0.2.0
