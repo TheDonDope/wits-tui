@@ -6,6 +6,7 @@ we will keep it simple and list features and planned changes in this file.
 ## 🚀 Tracking Features and Changes
 
 Each feature or change is tracked with:
+
 - **Status**: Planned | In Progress | Implemented (since `<commitSha or tag>`)
 - **Relevant Commits**: `<commitSha1>, <commitSha2>, ...`
 - **Description**: A brief explanation of the feature or change.
