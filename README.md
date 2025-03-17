@@ -1,5 +1,7 @@
 # Wits - The 🥦 Information Tracking System
 
+[![codecov](https://codecov.io/gh/TheDonDope/wits-tui/graph/badge.svg?token=9sWIVhEeIX)](https://codecov.io/gh/TheDonDope/wits-tui)
+
 Wits aims to help cannabis patients and users to manage and monitor their cannabis consumption and inventory.
 
 ## Changelog & Roadmap
