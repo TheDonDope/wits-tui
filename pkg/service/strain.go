@@ -21,13 +21,13 @@ type StrainServiceType struct {
 
 // NewStrainService creates a new service layer for strains.
 func NewStrainService(s storage.StrainStore) *StrainServiceType {
-	log.Printf("✅ 🤝  (pkg/service/strain.go) NewStrainService(s storage.StrainStore: %v)\n", s)
+	log.Println("✅ 🤝  (pkg/service/strain.go) NewStrainService(s storage.StrainStore)")
 	return &StrainServiceType{store: s}
 }
 
 // AddStrain adds a strain to the store.
 func (svc *StrainServiceType) AddStrain(s *can.Strain) error {
-	log.Printf("💬 🤝  (pkg/service/strain.go) AddStrain(s *can.Strain: %v)\n", s)
+	log.Printf("💬 🤝  (pkg/service/strain.go) AddStrain(s *can.Strain: %v)\n", s.ID)
 	return svc.store.AddStrain(s)
 }
 

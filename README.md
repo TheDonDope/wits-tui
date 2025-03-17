@@ -71,7 +71,27 @@ go test -race -v ./... -coverprofile coverage.out
         github.com/TheDonDope/wits-tui/cmd/wits/home            coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/cannabis             coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/service              coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/pkg/storage              coverage: 0.0% of statements
+=== RUN   TestInMemoryStore
+=== RUN   TestInMemoryStore/AddStrain
+=== RUN   TestInMemoryStore/GetStrains
+=== RUN   TestInMemoryStore/FindStrainByProduct
+--- PASS: TestInMemoryStore (0.00s)
+    --- PASS: TestInMemoryStore/AddStrain (0.00s)
+    --- PASS: TestInMemoryStore/GetStrains (0.00s)
+    --- PASS: TestInMemoryStore/FindStrainByProduct (0.00s)
+=== RUN   TestYAMLFileStore
+=== RUN   TestYAMLFileStore/AddStrain
+=== RUN   TestYAMLFileStore/GetStrains
+=== RUN   TestYAMLFileStore/FindStrainByProduct
+=== RUN   TestYAMLFileStore/Persistence
+--- PASS: TestYAMLFileStore (0.00s)
+    --- PASS: TestYAMLFileStore/AddStrain (0.00s)
+    --- PASS: TestYAMLFileStore/GetStrains (0.00s)
+    --- PASS: TestYAMLFileStore/FindStrainByProduct (0.00s)
+    --- PASS: TestYAMLFileStore/Persistence (0.00s)
+PASS
+coverage: 78.8% of statements
+ok      github.com/TheDonDope/wits-tui/pkg/storage      1.027s  coverage: 78.8% of statements
         github.com/TheDonDope/wits-tui/pkg/tui          coverage: 0.0% of statements
 ?       github.com/TheDonDope/wits-tui/pkg/version      [no test files]
 ```

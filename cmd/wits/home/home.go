@@ -16,7 +16,7 @@ var Command = &cobra.Command{
 	RunE: func(_ *cobra.Command, _ []string) error {
 		_, err := tea.NewProgram(tui.InitialMenuModel(), tea.WithAltScreen()).Run()
 		if err != nil {
-			log.Fatalf("🚨 🖥️  (cmd/wits/main.go) ❓❓❓ ❓ 🗒️  Error starting program: %v \n", err)
+			log.Fatalf("🚨 🖥️  (cmd/wits/main.go) ❓ 🗒️  Error starting program: %v \n", err)
 			return err
 		}
 		return nil

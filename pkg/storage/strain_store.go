@@ -35,12 +35,12 @@ type StrainStoreInMemory struct {
 
 // AddStrain adds a strain to the store, using its product name as the key.
 func (ssim *StrainStoreInMemory) AddStrain(s *can.Strain) error {
-	log.Printf("💬 💾  (pkg/storage/strain_store.go) AddStrain(s *can.Strain: %v) \n", s)
+	log.Printf("💬 💾  (pkg/storage/strain_store.go) AddStrain(s *can.Strain: %v) \n", s.ID)
 	ssim.mu.Lock()
 	defer ssim.mu.Unlock()
 
 	if _, exists := ssim.strains[s.Strain]; exists {
-		log.Fatalf("🚨 💾  (pkg/storage/strain_store.go) ❓❓❓ ❓ 🗒️  Failed to add already existing strain: %v \n", s)
+		log.Printf("🚨 💾  (pkg/storage/strain_store.go) 🗒️  Failed to add already existing strain: %v \n", s.ID)
 		return ErrStrainAlreadyExists
 	}
 	ssim.strains[s.Strain] = s
@@ -70,10 +70,10 @@ func (ssim *StrainStoreInMemory) FindStrainByProduct(p string) (*can.Strain, err
 
 	strain, exists := ssim.strains[p]
 	if !exists {
-		log.Fatalf("🚨 💾  (pkg/storage/strain_store.go) ❓❓❓ ❓ 🗒️  Strain with product name %v does not exist. \n", p)
+		log.Printf("🚨 💾  (pkg/storage/strain_store.go) 🗒️  Strain with product name %v does not exist. \n", p)
 		return nil, ErrStrainNotFound
 	}
-	log.Printf("✅ 💾  (pkg/storage/strain_store.go) FindStrainByProduct() -> strain: %v \n", strain)
+	log.Printf("✅ 💾  (pkg/storage/strain_store.go) FindStrainByProduct() -> strain: %v (%v)\n", strain.Strain, strain.ID)
 	return strain, nil
 }
 
@@ -99,19 +99,19 @@ type StrainStoreYMLFile struct {
 
 // AddStrain adds a strain to the store, using its product name as the key.
 func (ssyf *StrainStoreYMLFile) AddStrain(s *can.Strain) error {
-	log.Printf("💬 💾  (pkg/storage/strain_store.go) AddStrain(s *can.Strain: %v) \n", s)
+	log.Printf("💬 💾  (pkg/storage/strain_store.go) AddStrain(s *can.Strain: %v) \n", s.ID)
 	ssyf.mu.Lock()
 	defer ssyf.mu.Unlock()
 
 	if _, exists := ssyf.strains[s.Strain]; exists {
-		log.Fatalf("🚨 💾  (pkg/storage/strain_store.go) ❓❓❓ ❓ 🗒️  Failed to add already existing strain: %v \n", s)
+		log.Printf("🚨 💾  (pkg/storage/strain_store.go) 🗒️  Failed to add already existing strain: %v \n", s.ID)
 		return ErrStrainAlreadyExists
 	}
 	ssyf.strains[s.Strain] = s
 
 	data, err := yaml.Marshal(ssyf.strains)
 	if err != nil {
-		log.Fatalf("🚨 💾  (pkg/storage/strain_store.go) ❓❓❓ ❓ 🗒️  Failed to marshal strain with error: %v \n", err)
+		log.Printf("🚨 💾  (pkg/storage/strain_store.go) 🗒️  Failed to marshal strain with error: %v \n", err)
 		return err
 	}
 	log.Println("✅ 💾  (pkg/storage/strain_store.go) AddStrain()")
@@ -140,10 +140,10 @@ func (ssyf *StrainStoreYMLFile) FindStrainByProduct(p string) (*can.Strain, erro
 
 	strain, exists := ssyf.strains[p]
 	if !exists {
-		log.Fatalf("🚨 💾  (pkg/storage/strain_store.go) ❓❓❓ ❓ 🗒️  Strain with product name %v does not exist. \n", p)
+		log.Printf("🚨 💾  (pkg/storage/strain_store.go) 🗒️  Strain with product name %v does not exist. \n", p)
 		return nil, ErrStrainNotFound
 	}
-	log.Printf("✅ 💾  (pkg/storage/strain_store.go) FindStrainByProduct() -> strain: %v \n", strain)
+	log.Printf("✅ 💾  (pkg/storage/strain_store.go) FindStrainByProduct() -> strain: %v (%v) \n", strain.Strain, strain.ID)
 	return strain, nil
 }
 
@@ -177,13 +177,13 @@ func NewStrainStore() StrainStore {
 		data, err := os.ReadFile(fmt.Sprintf("%s/%s", os.Getenv("WITS_DIR"), strainsFile))
 		if err != nil {
 			if os.IsNotExist(err) {
-				log.Println("ℹ️ 💾  (pkg/storage/strain_store.go) 🗒️  Strain file not existing. Returning new empty store.")
+				log.Println("ℹ️  💾  (pkg/storage/strain_store.go) 🗒️  Strain file not existing. Returning new empty store.")
 				return ssyf
 			}
 		}
 		err = yaml.Unmarshal(data, ssyf.strains)
 		if err != nil {
-			log.Printf("🚨 💾  (pkg/storage/strain_store.go) ❓❓❓ ❓ 🗒️  Failed unmarshal strain data with error: %v. Returning new empty store. \n", err)
+			log.Printf("🚨 💾  (pkg/storage/strain_store.go) 🗒️  Failed unmarshal strain data with error: %v. Returning new empty store. \n", err)
 			return ssyf
 		}
 		log.Printf("✅ 💾  (pkg/storage/strain_store.go) NewStrainStore() -> store: %v \n", ssyf)

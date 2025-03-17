@@ -67,7 +67,7 @@ func main() {
 	ensureWitsFolders()
 	f, err := tea.LogToFile(fmt.Sprintf("%s/%s/%s", os.Getenv("WITS_DIR"), os.Getenv("LOG_DIR"), os.Getenv("LOG_FILE")), "debug")
 	if err != nil {
-		log.Fatalf("🚨 🖥️  (cmd/wits/main.go) ❓❓❓ ❓ 🗒️  Failed setting the debug log file: %v \n", err)
+		log.Fatalf("🚨 🖥️  (cmd/wits/main.go) ❓ 🗒️  Failed setting the debug log file: %v \n", err)
 	}
 	defer f.Close()
 	if err := rootCmd.ExecuteContext(ctx); err != nil {
@@ -78,7 +78,7 @@ func main() {
 
 func loadEnvironment() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatalf("🚨 🖥️  (cmd/wits/main.go) ❓❓❓ ❓ 🗒️  Failed to load configuration from environment: %v \n", err)
+		log.Fatalf("🚨 🖥️  (cmd/wits/main.go) ❓ 🗒️  Failed to load configuration from environment: %v \n", err)
 	}
 	log.Println("✅ 🖥️  (cmd/wits/main.go) loadEnvironment()")
 }
