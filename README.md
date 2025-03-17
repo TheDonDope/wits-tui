@@ -92,7 +92,7 @@ go test -race -v ./... -coverprofile coverage.out
         --- PASS: TestStrainService/FindStrainByProduct/NotFound (0.00s)
 PASS
 coverage: 100.0% of statements
-ok      github.com/TheDonDope/wits-tui/pkg/service      1.023s  coverage: 100.0% of statements
+ok      github.com/TheDonDope/wits-tui/pkg/service      1.011s  coverage: 100.0% of statements
 === RUN   TestInMemoryStore
 === RUN   TestInMemoryStore/AddStrain
 === RUN   TestInMemoryStore/GetStrains
@@ -113,8 +113,54 @@ ok      github.com/TheDonDope/wits-tui/pkg/service      1.023s  coverage: 100.0%
     --- PASS: TestYAMLFileStore/Persistence (0.00s)
 PASS
 coverage: 78.8% of statements
-ok      github.com/TheDonDope/wits-tui/pkg/storage      1.027s  coverage: 78.8% of statements
-        github.com/TheDonDope/wits-tui/pkg/tui          coverage: 0.0% of statements
+ok      github.com/TheDonDope/wits-tui/pkg/storage      1.018s  coverage: 78.8% of statements
+=== RUN   TestInitialHomeModel
+--- PASS: TestInitialHomeModel (0.00s)
+=== RUN   TestHomeModel_Update
+=== RUN   TestHomeModel_Update/QuitKey
+=== RUN   TestHomeModel_Update/CtrlC
+--- PASS: TestHomeModel_Update (0.00s)
+    --- PASS: TestHomeModel_Update/QuitKey (0.00s)
+    --- PASS: TestHomeModel_Update/CtrlC (0.00s)
+=== RUN   TestHomeModel_View
+=== RUN   TestHomeModel_View/EmptyState
+=== RUN   TestHomeModel_View/WithComponents
+--- PASS: TestHomeModel_View (0.00s)
+    --- PASS: TestHomeModel_View/EmptyState (0.00s)
+    --- PASS: TestHomeModel_View/WithComponents (0.00s)
+=== RUN   TestMarkedText
+=== RUN   TestMarkedText/NoMarker
+=== RUN   TestMarkedText/ValidMarker
+=== RUN   TestMarkedText/EndMarker
+=== RUN   TestMarkedText/DoubleMarker
+--- PASS: TestMarkedText (0.00s)
+    --- PASS: TestMarkedText/NoMarker (0.00s)
+    --- PASS: TestMarkedText/ValidMarker (0.00s)
+    --- PASS: TestMarkedText/EndMarker (0.00s)
+    --- PASS: TestMarkedText/DoubleMarker (0.00s)
+=== RUN   TestBreadcrumbTitle
+=== RUN   TestBreadcrumbTitle/Single
+=== RUN   TestBreadcrumbTitle/Multiple
+=== RUN   TestBreadcrumbTitle/EmptyNodes
+--- PASS: TestBreadcrumbTitle (0.00s)
+    --- PASS: TestBreadcrumbTitle/Single (0.00s)
+    --- PASS: TestBreadcrumbTitle/Multiple (0.00s)
+    --- PASS: TestBreadcrumbTitle/EmptyNodes (0.00s)
+=== RUN   TestStyles
+=== RUN   TestStyles/BaseStyle
+=== RUN   TestStyles/HeaderText
+--- PASS: TestStyles (0.00s)
+    --- PASS: TestStyles/BaseStyle (0.00s)
+    --- PASS: TestStyles/HeaderText (0.00s)
+=== RUN   TestHomeModelBuilder
+=== RUN   TestHomeModelBuilder/SetTitle
+=== RUN   TestHomeModelBuilder/SetComponents
+--- PASS: TestHomeModelBuilder (0.00s)
+    --- PASS: TestHomeModelBuilder/SetTitle (0.00s)
+    --- PASS: TestHomeModelBuilder/SetComponents (0.00s)
+PASS
+coverage: 31.1% of statements
+ok      github.com/TheDonDope/wits-tui/pkg/tui  1.079s  coverage: 31.1% of statements
 ?       github.com/TheDonDope/wits-tui/pkg/version      [no test files]
 ```
 
