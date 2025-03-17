@@ -2,6 +2,50 @@
 ## [Unreleased]
 
 
+<a name="v0.4.0"></a>
+## [v0.4.0] - 2025-03-17
+### Chore
+- add release target to makefile
+- clean up makefile
+- **ci:** upload test coverage results to codacy
+- **ci:** fix bug report template formatting
+- **ci:** upload test coverage results on github build
+- **deps:** bump github.com/charmbracelet/lipgloss from 1.0.0 to 1.1.0
+
+### Docs
+- fix formatting
+- update roadmap
+- add codacy badge
+- update roadmap
+- add changelog for v0.3.0
+
+### Feat
+- integrate cobra commands
+- configure debug logging
+- enable configuration through environment variables
+- **cmd-wits:** add logging to main cmd
+- **pkg:** add stringer methods for strain and store
+- **pkg-service:** add logging to strain service
+- **pkg-storage:** add logging to strain store
+- **pkg-tui:** format strain list item more nicely
+
+### Fix
+- **pkg:** correctly initialize strain store and load from yml file
+- **pkg-tui:** initialize strain editor properly
+- **pkg-tui:** wire up home view correctly
+- **pkg-tui:** trigger list loading from menus
+- **pkg-tui:** properly update strain list
+
+### Test
+- **pkg-service:** add tests for strain service
+- **pkg-storage:** add tests for strain store
+- **pkg-tui:** add menu model tests
+- **pkg-tui:** add statistics home model tests
+- **pkg-tui:** add settings home model tests
+- **pkg-tui:** add devices home model tests
+- **pkg-tui:** add home model tests
+
+
 <a name="v0.3.0"></a>
 ## [v0.3.0] - 2025-03-13
 ### Chore
@@ -60,6 +104,7 @@
 - initial commit
 
 
-[Unreleased]: https://github.com/TheDonDope/wits-tui/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/TheDonDope/wits-tui/compare/v0.4.0...HEAD
+[v0.4.0]: https://github.com/TheDonDope/wits-tui/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/TheDonDope/wits-tui/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/TheDonDope/wits-tui/compare/v0.1.0...v0.2.0
