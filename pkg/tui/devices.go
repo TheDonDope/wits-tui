@@ -18,7 +18,7 @@ const (
 var devicesActions = map[devicesAction]string{
 	createDevice: markedText("➕ &Add Device"),
 	viewDevice:   markedText("📋 &View Devices"),
-	editDevice:   markedText("✏️ &Edit Device"),
+	editDevice:   markedText("✏️  &Edit Device"),
 	deleteDevice: markedText("❌ &Delete Device")}
 
 // DevicesHomeModel is the tea.Model for the Devices appliance.
