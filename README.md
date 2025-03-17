@@ -67,100 +67,7 @@ go build \
 ```shell
 $ make test
 go test -race -v ./... -coverprofile coverage.out
-        github.com/TheDonDope/wits-tui/cmd/wits         coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/cmd/wits/home            coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/pkg/cannabis             coverage: 0.0% of statements
-=== RUN   TestStrainService
-=== RUN   TestStrainService/AddStrain
-=== RUN   TestStrainService/AddStrain/Success
-=== RUN   TestStrainService/AddStrain/Error
-=== RUN   TestStrainService/GetStrains
-=== RUN   TestStrainService/GetStrains/Empty
-=== RUN   TestStrainService/GetStrains/WithResults
-=== RUN   TestStrainService/FindStrainByProduct
-=== RUN   TestStrainService/FindStrainByProduct/Found
-=== RUN   TestStrainService/FindStrainByProduct/NotFound
---- PASS: TestStrainService (0.00s)
-    --- PASS: TestStrainService/AddStrain (0.00s)
-        --- PASS: TestStrainService/AddStrain/Success (0.00s)
-        --- PASS: TestStrainService/AddStrain/Error (0.00s)
-    --- PASS: TestStrainService/GetStrains (0.00s)
-        --- PASS: TestStrainService/GetStrains/Empty (0.00s)
-        --- PASS: TestStrainService/GetStrains/WithResults (0.00s)
-    --- PASS: TestStrainService/FindStrainByProduct (0.00s)
-        --- PASS: TestStrainService/FindStrainByProduct/Found (0.00s)
-        --- PASS: TestStrainService/FindStrainByProduct/NotFound (0.00s)
-PASS
-coverage: 100.0% of statements
-ok      github.com/TheDonDope/wits-tui/pkg/service      1.011s  coverage: 100.0% of statements
-=== RUN   TestInMemoryStore
-=== RUN   TestInMemoryStore/AddStrain
-=== RUN   TestInMemoryStore/GetStrains
-=== RUN   TestInMemoryStore/FindStrainByProduct
---- PASS: TestInMemoryStore (0.00s)
-    --- PASS: TestInMemoryStore/AddStrain (0.00s)
-    --- PASS: TestInMemoryStore/GetStrains (0.00s)
-    --- PASS: TestInMemoryStore/FindStrainByProduct (0.00s)
-=== RUN   TestYAMLFileStore
-=== RUN   TestYAMLFileStore/AddStrain
-=== RUN   TestYAMLFileStore/GetStrains
-=== RUN   TestYAMLFileStore/FindStrainByProduct
-=== RUN   TestYAMLFileStore/Persistence
---- PASS: TestYAMLFileStore (0.00s)
-    --- PASS: TestYAMLFileStore/AddStrain (0.00s)
-    --- PASS: TestYAMLFileStore/GetStrains (0.00s)
-    --- PASS: TestYAMLFileStore/FindStrainByProduct (0.00s)
-    --- PASS: TestYAMLFileStore/Persistence (0.00s)
-PASS
-coverage: 78.8% of statements
-ok      github.com/TheDonDope/wits-tui/pkg/storage      1.018s  coverage: 78.8% of statements
-=== RUN   TestInitialHomeModel
---- PASS: TestInitialHomeModel (0.00s)
-=== RUN   TestHomeModel_Update
-=== RUN   TestHomeModel_Update/QuitKey
-=== RUN   TestHomeModel_Update/CtrlC
---- PASS: TestHomeModel_Update (0.00s)
-    --- PASS: TestHomeModel_Update/QuitKey (0.00s)
-    --- PASS: TestHomeModel_Update/CtrlC (0.00s)
-=== RUN   TestHomeModel_View
-=== RUN   TestHomeModel_View/EmptyState
-=== RUN   TestHomeModel_View/WithComponents
---- PASS: TestHomeModel_View (0.00s)
-    --- PASS: TestHomeModel_View/EmptyState (0.00s)
-    --- PASS: TestHomeModel_View/WithComponents (0.00s)
-=== RUN   TestMarkedText
-=== RUN   TestMarkedText/NoMarker
-=== RUN   TestMarkedText/ValidMarker
-=== RUN   TestMarkedText/EndMarker
-=== RUN   TestMarkedText/DoubleMarker
---- PASS: TestMarkedText (0.00s)
-    --- PASS: TestMarkedText/NoMarker (0.00s)
-    --- PASS: TestMarkedText/ValidMarker (0.00s)
-    --- PASS: TestMarkedText/EndMarker (0.00s)
-    --- PASS: TestMarkedText/DoubleMarker (0.00s)
-=== RUN   TestBreadcrumbTitle
-=== RUN   TestBreadcrumbTitle/Single
-=== RUN   TestBreadcrumbTitle/Multiple
-=== RUN   TestBreadcrumbTitle/EmptyNodes
---- PASS: TestBreadcrumbTitle (0.00s)
-    --- PASS: TestBreadcrumbTitle/Single (0.00s)
-    --- PASS: TestBreadcrumbTitle/Multiple (0.00s)
-    --- PASS: TestBreadcrumbTitle/EmptyNodes (0.00s)
-=== RUN   TestStyles
-=== RUN   TestStyles/BaseStyle
-=== RUN   TestStyles/HeaderText
---- PASS: TestStyles (0.00s)
-    --- PASS: TestStyles/BaseStyle (0.00s)
-    --- PASS: TestStyles/HeaderText (0.00s)
-=== RUN   TestHomeModelBuilder
-=== RUN   TestHomeModelBuilder/SetTitle
-=== RUN   TestHomeModelBuilder/SetComponents
---- PASS: TestHomeModelBuilder (0.00s)
-    --- PASS: TestHomeModelBuilder/SetTitle (0.00s)
-    --- PASS: TestHomeModelBuilder/SetComponents (0.00s)
-PASS
-coverage: 31.1% of statements
-ok      github.com/TheDonDope/wits-tui/pkg/tui  1.079s  coverage: 31.1% of statements
+[...]
 ?       github.com/TheDonDope/wits-tui/pkg/version      [no test files]
 ```
 
@@ -169,12 +76,7 @@ ok      github.com/TheDonDope/wits-tui/pkg/tui  1.079s  coverage: 31.1% of state
 ```shell
 $ make cover
 go test -race -v ./... -coverprofile coverage.out
-        github.com/TheDonDope/wits-tui/cmd/wits         coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/cmd/wits/home            coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/pkg/cannabis             coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/pkg/service              coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/pkg/storage              coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/pkg/tui          coverage: 0.0% of statements
+[...]
 ?       github.com/TheDonDope/wits-tui/pkg/version      [no test files]
 go tool cover -html coverage.out -o coverage.html
 ```
@@ -184,12 +86,7 @@ go tool cover -html coverage.out -o coverage.html
 ```shell
 $ make show-cover
 go test -race -v ./... -coverprofile coverage.out
-        github.com/TheDonDope/wits-tui/cmd/wits         coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/cmd/wits/home            coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/pkg/cannabis             coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/pkg/service              coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/pkg/storage              coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/pkg/tui          coverage: 0.0% of statements
+[...]
 ?       github.com/TheDonDope/wits-tui/pkg/version      [no test files]
 go tool cover -html coverage.out -o coverage.html
 open coverage.html
