@@ -13,11 +13,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TestMain handles global test setup
 func TestMain(m *testing.M) {
+	// Disable log output during tests
 	log.SetOutput(io.Discard)
-
-	code := m.Run()
-	os.Exit(code)
+	os.Exit(m.Run())
 }
 
 // testStrain generates a consistent test strain with fixed values

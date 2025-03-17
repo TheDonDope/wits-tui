@@ -70,7 +70,29 @@ go test -race -v ./... -coverprofile coverage.out
         github.com/TheDonDope/wits-tui/cmd/wits         coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/cmd/wits/home            coverage: 0.0% of statements
         github.com/TheDonDope/wits-tui/pkg/cannabis             coverage: 0.0% of statements
-        github.com/TheDonDope/wits-tui/pkg/service              coverage: 0.0% of statements
+=== RUN   TestStrainService
+=== RUN   TestStrainService/AddStrain
+=== RUN   TestStrainService/AddStrain/Success
+=== RUN   TestStrainService/AddStrain/Error
+=== RUN   TestStrainService/GetStrains
+=== RUN   TestStrainService/GetStrains/Empty
+=== RUN   TestStrainService/GetStrains/WithResults
+=== RUN   TestStrainService/FindStrainByProduct
+=== RUN   TestStrainService/FindStrainByProduct/Found
+=== RUN   TestStrainService/FindStrainByProduct/NotFound
+--- PASS: TestStrainService (0.00s)
+    --- PASS: TestStrainService/AddStrain (0.00s)
+        --- PASS: TestStrainService/AddStrain/Success (0.00s)
+        --- PASS: TestStrainService/AddStrain/Error (0.00s)
+    --- PASS: TestStrainService/GetStrains (0.00s)
+        --- PASS: TestStrainService/GetStrains/Empty (0.00s)
+        --- PASS: TestStrainService/GetStrains/WithResults (0.00s)
+    --- PASS: TestStrainService/FindStrainByProduct (0.00s)
+        --- PASS: TestStrainService/FindStrainByProduct/Found (0.00s)
+        --- PASS: TestStrainService/FindStrainByProduct/NotFound (0.00s)
+PASS
+coverage: 100.0% of statements
+ok      github.com/TheDonDope/wits-tui/pkg/service      1.023s  coverage: 100.0% of statements
 === RUN   TestInMemoryStore
 === RUN   TestInMemoryStore/AddStrain
 === RUN   TestInMemoryStore/GetStrains
