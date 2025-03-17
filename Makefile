@@ -55,3 +55,11 @@ show-cover: cover
 
 vet:
 	go vet ./...
+
+release:
+	@if [ -z "$(VERSION)" ]; then echo "Usage: make release VERSION=vX.X.X"; exit 1; fi
+	git-chglog --next-tag $(VERSION) -o CHANGELOG.md
+	git add CHANGELOG.md
+    git commit -m "docs: update changelog for $(VERSION)"
+	git tag -a $(VERSION) -m "Release $(VERSION)"
+	git push origin main --tags
