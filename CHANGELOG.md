@@ -2,8 +2,24 @@
 ## [Unreleased]
 
 
+<a name="v0.5.0"></a>
+## [v0.5.0] - 2025-03-20
+### Chore
+- **ci:** pin 3rd party github actions to specific commit
+- **vhs:** update rendered tapes for docs
+
+### Docs
+- add used tech to readme
+
+### Feat
+- add charmbracelt/vhs to gifs for documentation
+
+
 <a name="v0.4.1"></a>
 ## [v0.4.1] - 2025-03-17
+### Docs
+- update changelog for v0.4.1
+
 ### Fix
 - repair release target in makefile
 
@@ -111,7 +127,8 @@
 - initial commit
 
 
-[Unreleased]: https://github.com/TheDonDope/wits-tui/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/TheDonDope/wits-tui/compare/v0.5.0...HEAD
+[v0.5.0]: https://github.com/TheDonDope/wits-tui/compare/v0.4.1...v0.5.0
 [v0.4.1]: https://github.com/TheDonDope/wits-tui/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://github.com/TheDonDope/wits-tui/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/TheDonDope/wits-tui/compare/v0.2.0...v0.3.0
