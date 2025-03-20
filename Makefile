@@ -8,6 +8,8 @@ run: build
 install:
 	go install golang.org/x/tools/cmd/godoc@latest
 	go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
+	go install github.com/charmbracelet/gum@latest
+	go install github.com/charmbracelet/vhs@latest
 
 build:
 	go build \
@@ -39,6 +41,10 @@ doc:
 
 changelog:
 	git-chglog -o CHANGELOG.md
+
+render-tapes:
+	rm -rf ./vhs-output/*
+	./render-vhs-tapes.sh 
 
 test:
 	go test -race -v ./... -coverprofile coverage.out
