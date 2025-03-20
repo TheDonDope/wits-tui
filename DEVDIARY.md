@@ -1,5 +1,22 @@
 # Development Diary
 
+## 2025-03-20
+
+### Integrate more charmbracelet tools
+
+Today we integrated the tool vhs to create videos for the documentation
+
+- `592cb6e` feat: add charmbracelt/vhs to gifs for documentation
+- `3e86fdf` docs: add used tech to readme
+- `441930d` chore(vhs): update rendered tapes for docs
+- `fc32c6a` docs: update changelog for v0.5.0
+- `058c7cd` docs: add initial dev diary
+- `de1ef5f` feat: add dev-diary script
+
+### Notes for 2025-03-20
+
+No further notes for today
+
 ## 2025-03-18
 
 ### CI Hardening
