@@ -6,6 +6,19 @@ Wits aims to help cannabis patients and users to manage and monitor their cannab
 
 ![Wits Demo Video](./vhs-output/wits-demo.gif)
 
+## Notable technologies used
+
+Wits is built with the help of the following:
+
+- [charmbracelet/bubbletea](https://github.com/charmbracelet/bubbletea): A powerful little TUI framework 🏗
+- [charmbracelet/bubbles](https://github.com/charmbracelet/bubbles): TUI components for Bubble Tea 🫧
+- [charmbracelet/gum](https://github.com/charmbracelet/gum): A tool for glamorous shell scripts 🎀
+- [charmbracelet/huh](https://github.com/charmbracelet/huh): Build terminal forms and prompts 🤷
+- [charmbracelet/lipgloss](https://github.com/charmbracelet/lipgloss): Style definitions for nice terminal layouts 👄
+- [charmbracelet/vhs](https://github.com/charmbracelet/vhs): Your CLI home video recorder 📼
+- [NimbleMarkets/ntcharts](https://github.com/NimbleMarkets/ntcharts): Nimble Terminal Charts for the Golang BubbleTea framework and your TUIs
+- [spf13/cobra](https://github.com/spf13/cobra): A Commander for modern Go CLI interactions
+
 ## Changelog & Roadmap
 
 A detailed changelog can be found in the [CHANGELOG.md](./CHANGELOG.md) and the current development progress is tracked in the [ROADMAP.md](./ROADMAP.md). We do not use GitHub Issues but instead track our features, bugfixes and refactorings there.
