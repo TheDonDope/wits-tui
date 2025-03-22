@@ -60,7 +60,7 @@ Require make
 
 Set Shell "bash"
 Set FontSize 24
-Set FontFamily "JetBrainsMono NerdFont"
+Set FontFamily "JetBrainsMono Nerd Font"
 Set Width 1200
 Set Height 600
 
