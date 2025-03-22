@@ -59,6 +59,7 @@ Output vhs-output/wits-dev-diary.gif
 
 Set Shell "bash"
 Set FontSize 24
+Set FontFamily "JetBrainsMono Nerd Font"
 Set Width 1400
 Set Height 900
 

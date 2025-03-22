@@ -59,7 +59,8 @@ Output vhs-output/wits-make-cover.gif
 Require make
 
 Set Shell "bash"
-Set FontSize 32
+Set FontSize 24
+Set FontFamily "JetBrainsMono Nerd Font"
 Set Width 1200
 Set Height 600
 
