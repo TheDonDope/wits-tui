@@ -10,6 +10,32 @@ Wits aims to help cannabis patients and users to manage and monitor their cannab
 
 Wits is built with the help of the following:
 
+<div align="center">
+  <p>
+  <a href="https://github.com/charmbracelet/bubbletea">
+    <img src="https://github.com/user-attachments/assets/a600b1be-9b1a-48e8-a2a4-3f3917240db1" alt="Bubbletea Logo" width="100" style="margin:25px">
+  </a>
+  <a href="https://github.com/charmbracelet/bubbles">
+    <img src="https://stuff.charm.sh/bubbles/bubbles-github.png" alt="Bubbles Logo" width="100" style="margin:25px">
+  </a>
+  <a href="https://github.com/charmbracelet/gum">
+    <img src="https://stuff.charm.sh/gum/gum.png" alt="Gum Logo" width="100" style="margin:25px">
+  </a>
+  <a href="https://github.com/charmbracelet/huh">
+    <img src="https://stuff.charm.sh/huh/glenn.png" alt="Glenn Logo" width="100" style="margin:25px">
+  </a>
+  <a href="https://github.com/charmbracelet/lipgloss">
+    <img src="https://github.com/charmbracelet/lipgloss/assets/25087/147cadb1-4254-43ec-ae6b-8d6ca7b029a1" alt="Lipgloss Logo" width="100" style="margin:25px">
+  </a>
+  <a href="https://github.com/charmbracelet/vhs">
+    <img src="https://user-images.githubusercontent.com/42545625/198402537-12ca2f6c-0779-4eb8-a67c-8db9cb3df13c.png#gh-dark-mode-only" alt="VHS Logo" width="100" style="margin:25px">
+  </a>
+  <a href="https://github.com/spf13/cobra">
+    <img src="https://github.com/user-attachments/assets/cbc3adf8-0dff-46e9-a88d-5e2d971c169e" alt="Cobra Logo" width="100" style="margin:25px">
+  </a>
+  </p>
+</div>
+
 - [charmbracelet/bubbletea](https://github.com/charmbracelet/bubbletea): A powerful little TUI framework 🏗
 - [charmbracelet/bubbles](https://github.com/charmbracelet/bubbles): TUI components for Bubble Tea 🫧
 - [charmbracelet/gum](https://github.com/charmbracelet/gum): A tool for glamorous shell scripts 🎀
