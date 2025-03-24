@@ -63,6 +63,8 @@ Wits can be configured through environment variables, detailed here:
 
 A minimum viable `.env` file can be found at [.env.example](.env.example). Simply rename it to `.env` to be able to run the application with a yaml file based storage.
 
+![Env Example Source](./env.example.svg)
+
 ## Building & Running the Application
 
 Building the binary and running it requires only a simple invocation to `make`:

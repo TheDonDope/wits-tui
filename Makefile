@@ -8,6 +8,7 @@ run: build
 install:
 	go install golang.org/x/tools/cmd/godoc@latest
 	go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
+	go install github.com/charmbracelet/freeze@latest
 	go install github.com/charmbracelet/gum@latest
 	go install github.com/charmbracelet/vhs@latest
 
