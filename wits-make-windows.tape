@@ -61,8 +61,8 @@ Require make
 Set Shell "bash"
 Set FontSize 24
 Set FontFamily "JetBrainsMono Nerd Font"
-Set Width 1200
-Set Height 600
+Set Width 1400
+Set Height 900
 
 Type "make build-windows" Sleep 500ms  Enter
 

@@ -1,16 +1,16 @@
 package tui
 
 import (
-	"fmt"
-
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 var appliances = []string{
-	markedText("🌿 &Strains"),
-	markedText("🚀 &Devices"),
-	markedText("🔧 S&ettings"),
-	markedText("📊 S&tatistics")}
+	"[=== Strains ===]",
+	"[=== Devices ===]",
+	"[=== Settings ===]",
+	"[=== Statistics ===]",
+}
 
 // MenuModel is the tea.Model for the main menu.
 type MenuModel struct {
@@ -24,8 +24,6 @@ func InitialMenuModel() MenuModel {
 		items: appliances,
 	}
 }
-
-// MenuModel implementation of tea.Model interface -----------------------------
 
 // Init is the first function that will be called. It returns an optional
 // initial command. To not perform an initial command return nil.
@@ -51,15 +49,6 @@ func (m MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.cursor >= len(m.items) {
 				m.cursor = 0 // Wrap to first item
 			}
-		case "alt+s":
-			shm := initialStrainsHomeModel()
-			return shm, shm.onStrainsListed()
-		case "alt+d":
-			return initialDevicesHomeModel(), nil
-		case "alt+e":
-			return initialSettingsModel(), nil
-		case "alt+t":
-			return initialStatisticsHomeModel(), nil
 		case "enter":
 			return onMenuSelected(m)
 		case "esc":
@@ -69,25 +58,66 @@ func (m MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-// View renders the program's UI, which is just a string. The view is
-// rendered after every Update.
+// View renders the program's UI using Lipgloss for styling.
 func (m MenuModel) View() string {
-	s := "🥦 Welcome to Wits!\n\n"
+	// Create a fancy header style using Lipgloss.
+	headerStyle := lipgloss.NewStyle().
+		Bold(true).
+		Foreground(lipgloss.Color("230")).     // Light text color.
+		Background(lipgloss.Color("#4CAF50")). // Calm emerald green background.
+		Padding(1, 4).
+		Border(lipgloss.RoundedBorder(), true).
+		Align(lipgloss.Center).
+		Width(40)
+	header := headerStyle.Render(" Wits")
+
+	// Set a fixed width for items.
+	itemWidth := 30
+
+	// Define a style for unselected menu items.
+	itemStyle := lipgloss.NewStyle().
+		Border(lipgloss.NormalBorder(), true).
+		Padding(0, 1).
+		Width(itemWidth).
+		Align(lipgloss.Center).
+		Foreground(lipgloss.Color("240")).
+		Background(lipgloss.Color("0"))
+
+	// Define a style for the selected menu item: bold with highlighted background.
+	selectedStyle := lipgloss.NewStyle().
+		Bold(true).
+		Border(lipgloss.RoundedBorder(), true).
+		Padding(0, 1).
+		Width(itemWidth).
+		Align(lipgloss.Center).
+		Foreground(lipgloss.Color("230")). // Light text color for contrast.
+		Background(lipgloss.Color("236"))  // Highlight background.
+
+	// Render each menu item.
+	s := header + "\n\n"
 	for i, item := range m.items {
-		cursor := " "
+		var rendered string
 		if m.cursor == i {
-			cursor = "> "
+			rendered = selectedStyle.Render(item)
+		} else {
+			rendered = itemStyle.Render(item)
 		}
-		s += fmt.Sprintf("%s%s\n", cursor, item)
+		s += rendered + "\n\n"
 	}
 	s += "\nPress ctrl+c or q to quit."
-	return s
+
+	// Wrap the entire view in a container style that centers the block.
+	containerStyle := lipgloss.NewStyle().
+		Width(80). // Set the container width to 80 (adjust as needed)
+		Align(lipgloss.Center)
+	return containerStyle.Render(s)
 }
 
 // onMenuSelected returns a model for the selected menu.
 func onMenuSelected(m MenuModel) (tea.Model, tea.Cmd) {
 	switch m.cursor {
 	case 0:
+		// Open the strains view.
 		shm := initialStrainsHomeModel()
 		return shm, shm.onStrainsListed()
 	case 1:

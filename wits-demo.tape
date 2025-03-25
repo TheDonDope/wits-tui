@@ -60,8 +60,8 @@ Output vhs-output/wits-demo.gif
 Set Shell "bash"
 Set FontSize 24 
 Set FontFamily "JetBrainsMono Nerd Font"
-Set Width 1200
-Set Height 600
+Set Width 1400 
+Set Height 900
 
 Type "./bin/wits" Sleep 500ms  Enter
 
