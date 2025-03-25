@@ -2,6 +2,27 @@
 ## [Unreleased]
 
 
+<a name="v0.6.0"></a>
+## [v0.6.0] - 2025-03-25
+### Chore
+- update rendered tapes
+- set font options for tapes
+
+### Docs
+- render env example source in readme
+- add dependecy logos to readme
+- add initial dev diary
+
+### Feat
+- make the main menu more beautiful
+- add tape for dev-diary
+- add dev-diary script
+
+### Fix
+- use correct font family in vhs tapes
+- remove unnecessary variable interpolation
+
+
 <a name="v0.5.0"></a>
 ## [v0.5.0] - 2025-03-20
 ### Chore
@@ -9,6 +30,7 @@
 - **vhs:** update rendered tapes for docs
 
 ### Docs
+- update changelog for v0.5.0
 - add used tech to readme
 
 ### Feat
@@ -127,7 +149,8 @@
 - initial commit
 
 
-[Unreleased]: https://github.com/TheDonDope/wits-tui/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/TheDonDope/wits-tui/compare/v0.6.0...HEAD
+[v0.6.0]: https://github.com/TheDonDope/wits-tui/compare/v0.5.0...v0.6.0
 [v0.5.0]: https://github.com/TheDonDope/wits-tui/compare/v0.4.1...v0.5.0
 [v0.4.1]: https://github.com/TheDonDope/wits-tui/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://github.com/TheDonDope/wits-tui/compare/v0.3.0...v0.4.0
