@@ -202,7 +202,7 @@ func initialStrainForm() *huh.Form {
 			huh.NewInput().
 				Key("manufacturer").
 				Title("Manufacturer").
-				Description("The producing company"),
+				Description("The producing company / importer"),
 
 			huh.NewInput().
 				Key("country").

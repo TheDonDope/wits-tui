@@ -13,7 +13,7 @@ type Strain struct {
 	ID           uuid.UUID   // The unique identifier
 	Strain       string      // The product name
 	Cultivar     string      // The breed
-	Manufacturer string      // The producer
+	Manufacturer string      // The producer / importer
 	Country      string      // The country of origin
 	Genetic      GeneticType // The genetic type
 	Radiated     bool        // If the strain was radiation treated
